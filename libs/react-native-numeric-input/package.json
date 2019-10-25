@@ -1,0 +1,68 @@
+{
+  "_from": "react-native-numeric-input@^1.8.3",
+  "_id": "react-native-numeric-input@1.8.3",
+  "_inBundle": false,
+  "_integrity": "sha512-8MeAgbM4+doAkwjPg7iEA604z4d7krJz9r0755YThldCdIvwWZh5VbtRDHxbkMVQ2Ix5xRujFSn7uQWMtln8RA==",
+  "_location": "/react-native-numeric-input",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "react-native-numeric-input@^1.8.3",
+    "name": "react-native-numeric-input",
+    "escapedName": "react-native-numeric-input",
+    "rawSpec": "^1.8.3",
+    "saveSpec": null,
+    "fetchSpec": "^1.8.3"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-numeric-input/-/react-native-numeric-input-1.8.3.tgz",
+  "_shasum": "e869aa1b60d0c38b92e84e44bb28944f48b4ccd3",
+  "_spec": "react-native-numeric-input@^1.8.3",
+  "_where": "/Users/duongtung/Freelancer/glowdawn/NewAPP/CookAid",
+  "author": {
+    "name": "omri himelbrand",
+    "email": "himelbrand@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/himelbrand/react-native-numeric-input/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "prop-types": "^15.6.1",
+    "react-native-pixel-perfect": "^1.0.1"
+  },
+  "deprecated": false,
+  "description": "a stylish numeric input for react native",
+  "homepage": "https://github.com/himelbrand/react-native-numeric-input",
+  "keywords": [
+    "react-native",
+    "react-component",
+    "react-native-component",
+    "react",
+    "mobile",
+    "ios",
+    "android",
+    "number-input",
+    "numeric-input",
+    "number",
+    "input",
+    "numeric"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "react-native-numeric-input",
+  "peerDependencies": {
+    "react-native-vector-icons": "^4.*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/himelbrand/react-native-numeric-input.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.8.3"
+}
