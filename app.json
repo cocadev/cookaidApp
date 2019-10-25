@@ -1,0 +1,62 @@
+{
+  "expo": {
+    "name": "JohnApp",
+    "description": "",
+    "slug": "johnapp",
+    "privacy": "unlisted",
+    "sdkVersion": "35.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "3.1.12",
+    "orientation": "portrait",
+    "icon": "./assets/icon-android.png",
+    "androidStatusBar": {
+      "hidden": true
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "",
+      "buildNumber": "1",
+      "supportsTablet": true,
+      "icon": "./assets/icon-ios.png"
+    },
+    "android": {
+      "package": "",
+      "versionCode": 1,
+      "permissions": [],
+      "publishBundlePath": "android\\app\\src\\main\\assets\\shell-app.bundle",
+      "publishManifestPath": "android\\app\\src\\main\\assets\\shell-app-manifest.json"
+    },
+    "facebookAppId": "",
+    "facebookDisplayName": "",
+    "facebookScheme": "",
+    "scheme": "",
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "",
+            "project": "",
+            "authToken": ""
+          }
+        }
+      ]
+    },
+    "notification": {
+      "icon": "./assets/icon_notification.png",
+      "color": "#ff8400"
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js"
+  },
+  "displayName": "",
+  "name": ""
+}

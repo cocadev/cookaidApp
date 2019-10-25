@@ -1,0 +1,11 @@
+node_modules/*
+.expo/*
+.expo-shared/*
+.expo-source/*
+.git/*
+.idea/*
+android/.gradle/*
+android/.idea/*
+android/build/*
+android/app/build/*
+android/app/app.iml
