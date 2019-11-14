@@ -1,13 +1,13 @@
-import React from 'react' ;
+import React from 'react';
 import { View, Image, Platform, StyleSheet } from 'react-native';
 import CacheImage from "./CacheImage";
 
 class CacheImageBackground extends React.Component {
 
-  render(){
-    const {children, style, imageStyle, imageRef, ...props} = this.props;
+  render() {
+    const { children, style, imageStyle, imageRef, ...props } = this.props;
 
-    return(
+    return (
       <View
         accessibilityIgnoresInvertColors={true}
         style={style}>
@@ -16,13 +16,6 @@ class CacheImageBackground extends React.Component {
           style={[
             StyleSheet.absoluteFill,
             {
-              // Temporary Workaround:
-              // Current (imperfect yet) implementation of <Image> overwrites width and height styles
-              // (which is not quite correct), and these styles conflict with explicitly set styles
-              // of <ImageBackground> and with our internal layout model here.
-              // So, we have to proxy/reapply these styles explicitly for actual <Image> component.
-              // This workaround should be removed after implementing proper support of
-              // intrinsic content size of the <Image>.
               width: style.width,
               height: style.height,
             },
@@ -34,4 +27,4 @@ class CacheImageBackground extends React.Component {
     )
   }
 }
-export default CacheImageBackground ;
+export default CacheImageBackground;
