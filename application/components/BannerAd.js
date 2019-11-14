@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {View} from 'react-native';
+import React, { Component } from 'react';
+import { View } from 'react-native';
 import ConfigApp from '../utils/ConfigApp';
 import { AdMobBanner } from 'expo-ads-admob';
-import {isIphoneX} from 'react-native-device-detection';
+import { isIphoneX } from 'react-native-device-detection';
 
 const Device = require('react-native-device-detection');
 
@@ -19,7 +19,7 @@ class BannerAd extends React.Component {
             bannerSize="banner"
             adUnitID={ConfigApp.BANNER_ID}
             testDeviceID={ConfigApp.TESTDEVICE_ID}
-            onDidFailToReceiveAdWithError={this.bannerError}/>
+            onDidFailToReceiveAdWithError={this.bannerError} />
         </View>
       );
     } else {
@@ -29,7 +29,7 @@ class BannerAd extends React.Component {
             bannerSize="banner"
             adUnitID={ConfigApp.BANNER_ID}
             testDeviceID={ConfigApp.TESTDEVICE_ID}
-            onDidFailToReceiveAdWithError={this.bannerError}/>
+            onDidFailToReceiveAdWithError={this.bannerError} />
         </View>
       );
     }
