@@ -1,12 +1,12 @@
-import React, {PureComponent} from 'react';
-import {NavigationActions, StackNavigator, withNavigation} from 'react-navigation';
-import {ImageBackground, Dimensions, View, ActivityIndicator, TouchableOpacity, FlatList} from 'react-native';
-import {Container, Text} from 'native-base';
+import React, { PureComponent } from 'react';
+import { NavigationActions, StackNavigator, withNavigation } from 'react-navigation';
+import { ImageBackground, Dimensions, View, ActivityIndicator, TouchableOpacity, FlatList } from 'react-native';
+import { Container, Text } from 'native-base';
 import Carousel from 'react-native-snap-carousel';
 import ConfigApp from '../utils/ConfigApp';
-import {StringI18} from "../utils/Strings";
+import { StringI18 } from "../utils/Strings";
 
-var {height, width} = Dimensions.get('window');
+var { height, width } = Dimensions.get('window');
 
 class RecipesHome extends React.PureComponent {
 
@@ -39,21 +39,21 @@ class RecipesHome extends React.PureComponent {
   RecipeDetails(item) {
     const navigateAction = NavigationActions.navigate({
       routeName: 'RecipeDetailsScreen',
-      params: {item}
+      params: { item }
     });
     this.props.navigation.dispatch(navigateAction);
   }
 
-  _renderItem({item, index}) {
+  _renderItem({ item, index }) {
     return (
-      <TouchableOpacity onPress={() => this.RecipeDetails(item)} activeOpacity={1} style={{flex: 1, marginRight: 10}}>
-        <ImageBackground source={{uri: ConfigApp.URL + 'images/' + item.recipe_image}} style={{
+      <TouchableOpacity onPress={() => this.RecipeDetails(item)} activeOpacity={1} style={{ flex: 1, marginRight: 10 }}>
+        <ImageBackground source={{ uri: ConfigApp.URL + 'images/' + item.recipe_image }} style={{
           height: 100,
           width: width * 0.7,
           borderTopLeftRadius: 10,
           borderTopRightRadius: 10,
           overflow: 'hidden'
-        }} imageStyle={{borderTopLeftRadius: 10, borderTopRightRadius: 10, overflow: 'hidden'}}>
+        }} imageStyle={{ borderTopLeftRadius: 10, borderTopRightRadius: 10, overflow: 'hidden' }}>
         </ImageBackground>
         <View style={{
           padding: 6,
@@ -65,9 +65,9 @@ class RecipesHome extends React.PureComponent {
           borderBottomRightRadius: 10
         }}>
           <Text numberOfLines={1}
-                style={{color: '#000', fontSize: 14, fontWeight: 'bold', marginBottom: 5}}>{item.recipe_title}</Text>
-          <View style={{flexDirection: 'column', marginBottom: 5}}>
-            <Text style={{fontSize: 13, color: '#a4a4a4', marginBottom: 5}}>{StringI18.translateIfNotExist(item.category_title) || StringI18.translateIfNotExist(item.chef_title)}</Text>
+            style={{ color: '#000', fontSize: 14, fontWeight: 'bold', marginBottom: 5 }}>{item.recipe_title}</Text>
+          <View style={{ flexDirection: 'column', marginBottom: 5 }}>
+            <Text style={{ fontSize: 13, color: '#a4a4a4', marginBottom: 5 }}>{StringI18.translateIfNotExist(item.category_title) || StringI18.translateIfNotExist(item.chef_title)}</Text>
           </View>
 
         </View>
@@ -84,16 +84,16 @@ class RecipesHome extends React.PureComponent {
           this._carousel = c;
         }}
         data={this.state.recipes}
-        renderItem={({item}) =>
+        renderItem={({ item }) =>
           <TouchableOpacity onPress={() => this.RecipeDetails(item)} activeOpacity={1}
-                            style={{flex: 1, marginRight: 10}}>
-            <ImageBackground source={{uri: ConfigApp.URL + 'images/' + item.recipe_image}} style={{
+            style={{ flex: 1, marginRight: 10 }}>
+            <ImageBackground source={{ uri: ConfigApp.URL + 'images/' + item.recipe_image }} style={{
               height: 100,
               width: width * 0.7,
               borderTopLeftRadius: 10,
               borderTopRightRadius: 10,
               overflow: 'hidden'
-            }} imageStyle={{borderTopLeftRadius: 10, borderTopRightRadius: 10, overflow: 'hidden'}}>
+            }} imageStyle={{ borderTopLeftRadius: 10, borderTopRightRadius: 10, overflow: 'hidden' }}>
             </ImageBackground>
             <View style={{
               padding: 6,
@@ -110,8 +110,8 @@ class RecipesHome extends React.PureComponent {
                 fontWeight: 'bold',
                 marginBottom: 5
               }}>{item.recipe_title}</Text>
-              <View style={{flexDirection: 'column', marginBottom: 5}}>
-                <Text style={{fontSize: 13, color: '#a4a4a4', marginBottom: 5, textTransform: 'capitalize'}}>{StringI18.translateIfNotExist(item.category_title) || StringI18.translateIfNotExist(item.chef_title)}</Text>
+              <View style={{ flexDirection: 'column', marginBottom: 5 }}>
+                <Text style={{ fontSize: 13, color: '#a4a4a4', marginBottom: 5, textTransform: 'capitalize' }}>{StringI18.translateIfNotExist(item.category_title) || StringI18.translateIfNotExist(item.chef_title)}</Text>
               </View>
 
             </View>
