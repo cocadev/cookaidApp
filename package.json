@@ -35,7 +35,7 @@
     "native-base": "^2.12.1",
     "react": "16.8.6",
     "react-dom": "^16.8.6",
-    "react-native": "^0.61.2",
+    "react-native": "^0.61.4",
     "react-native-cli": "^2.0.1",
     "react-native-device-detection": "^0.2.0",
     "react-native-form-validator": "^0.2.0",
