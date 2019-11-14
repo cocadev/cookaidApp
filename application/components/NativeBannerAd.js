@@ -1,18 +1,16 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ConfigApp from '../utils/ConfigApp';
 import { AdMobBanner } from 'expo-ads-admob';
 
 class NativeBannerAd extends React.Component {
 
   render() {
-
     return (
-
       <AdMobBanner
         bannerSize="banner"
         adUnitID={ConfigApp.BANNER_ID}
         testDeviceID={ConfigApp.TESTDEVICE_ID}
-        onDidFailToReceiveAdWithError={this.bannerError}/>
+        onDidFailToReceiveAdWithError={this.bannerError} />
 
     )
   }
