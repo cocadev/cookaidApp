@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import AppPreLoader from "../components/AppPreLoader";
-import {StyleSheet, FlatList, View} from 'react-native';
+import { StyleSheet, FlatList, View } from 'react-native';
 import * as firebase from 'firebase';
 import CommentEmpty from "./CommentEmpty";
 import CommentList from "../components/CommentList";
@@ -35,18 +35,18 @@ export default class ItemComments extends Component {
   }
 
   render() {
-    const {comments, loaded} = this.state;
+    const { comments, loaded } = this.state;
 
     if (!loaded) {
-      return (<AppPreLoader/>);
+      return (<AppPreLoader />);
     }
 
     if (!comments.length) {
-      return <CommentEmpty/>
+      return <CommentEmpty />
     }
 
     return (
-      <View style={{marginTop: 5, marginBottom: 15}}>
+      <View style={{ marginTop: 5, marginBottom: 15 }}>
         <FlatList
           data={comments}
           renderItem={(data) => this.renderComment(data.item)}
@@ -58,7 +58,7 @@ export default class ItemComments extends Component {
 
   renderComment(comment) {
     return (
-      <CommentList comment={comment}/>
+      <CommentList comment={comment} />
     )
   }
 }
