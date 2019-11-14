@@ -1,6 +1,6 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import * as firebase from 'firebase';
-import {View} from "react-native";
+import { View } from "react-native";
 import StarRating from 'react-native-star-rating';
 
 export default class ItemRating extends PureComponent {
@@ -9,8 +9,8 @@ export default class ItemRating extends PureComponent {
     this.state = {
       rating: 0
     };
-    const {itemId} = props;
-    const {starWidth} = props;
+    const { itemId } = props;
+    const { starWidth } = props;
     this.commentsRef = firebase.database().ref(`itemComments/${itemId}`);
   }
 
@@ -26,15 +26,12 @@ export default class ItemRating extends PureComponent {
           rating: comments.reduce((previous, current) => previous + current, 0) / comments.length
         });
 
-        /*this.refs.rating.setCurrentRating(
-          comments.reduce((previous, current) => previous + current, 0) / comments.length
-        );*/
       })
     });
   }
 
   render() {
-    const {rating} = this.state;
+    const { rating } = this.state;
     return (
       <View>
         <StarRating
@@ -46,9 +43,9 @@ export default class ItemRating extends PureComponent {
           halfStar={'ios-star-half'}
           iconSet={'Ionicons'}
           rating={rating}
-          containerStyle={{width: this.props.starWidth}}
+          containerStyle={{ width: this.props.starWidth }}
           starSize={this.props.starSize}
-          starStyle={{color: '#ffc107'}}
+          starStyle={{ color: '#ffc107' }}
         />
       </View>
     )
