@@ -1,15 +1,15 @@
 import React from 'react';
-import {View, TouchableOpacity} from 'react-native';
-import {LinearGradient} from "expo-linear-gradient";
+import { View, TouchableOpacity } from 'react-native';
+import { LinearGradient } from "expo-linear-gradient";
 import ColorsApp from "../utils/ColorsApp";
-import {Text} from "native-base";
-import {withNavigation} from "react-navigation";
-import {StringI18} from "../utils/Strings";
+import { Text } from "native-base";
+import { withNavigation } from "react-navigation";
+import { StringI18 } from "../utils/Strings";
 
 class CategoryCuisineComponent extends React.PureComponent {
 
   gotoCategoryScreen = (item) => {
-    const {isCategoryButton} = this.props;
+    const { isCategoryButton } = this.props;
     if (!isCategoryButton) {
       return;
     }
@@ -21,7 +21,7 @@ class CategoryCuisineComponent extends React.PureComponent {
       return null;
     }
 
-    const {isCategoryButton} = this.props;
+    const { isCategoryButton } = this.props;
     return (
       <TouchableOpacity activeOpacity={isCategoryButton ? 0.8 : 1} onPress={() => this.gotoCategoryScreen(item)}>
         <LinearGradient
@@ -34,7 +34,7 @@ class CategoryCuisineComponent extends React.PureComponent {
             marginLeft: -1,
             backgroundColor: ColorsApp.PRIMARY
           }}>
-          <Text style={{color: '#FFF', fontSize: 11, textTransform: 'capitalize'}}>{StringI18.translateIfNotExist(item.category_title)}</Text>
+          <Text style={{ color: '#FFF', fontSize: 11, textTransform: 'capitalize' }}>{StringI18.translateIfNotExist(item.category_title)}</Text>
         </LinearGradient>
       </TouchableOpacity>
     )
@@ -59,9 +59,9 @@ class CategoryCuisineComponent extends React.PureComponent {
   }
 
   render() {
-    const {item} = this.props;
+    const { item } = this.props;
     return (
-      <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 5,}}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5, }}>
         {this.renderCategoryTitle(item)}
         {this.renderCuisine(item)}
       </View>
