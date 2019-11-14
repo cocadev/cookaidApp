@@ -9,3 +9,5 @@ android/.idea/*
 android/build/*
 android/app/build/*
 android/app/app.iml
+
+yarn.lock
