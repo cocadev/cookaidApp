@@ -6,11 +6,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import AppPreLoader from './AppPreLoader';
 import ConfigApp from '../utils/ConfigApp';
 import GridView from 'react-native-super-grid';
-import {StringI18} from '../utils/Strings';
-import {bindActionCreators} from "redux";
-import {connect} from "react-redux";
-import {fetchCategory} from "../redux/actions/categoryActions";
-import {cachingCategoriesImage, getRandomArray} from "../utils/utils";
+import { StringI18 } from '../utils/Strings';
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { fetchCategory } from "../redux/actions/categoryActions";
+import { cachingCategoriesImage, getRandomArray } from "../utils/utils";
 import CacheImage from "./CacheImage";
 
 var styles = require('../../assets/files/Styles');
@@ -32,7 +32,7 @@ class CategoriesHome extends React.PureComponent {
   componentWillMount() {
     if (this.props.categories) {
       const categories = getRandomArray(this.props.categories, 6);
-      this.setState({categories})
+      this.setState({ categories })
     }
     if (!this.props.categories) {
       this.props.fetchCategory();
@@ -42,7 +42,7 @@ class CategoriesHome extends React.PureComponent {
   componentWillReceiveProps(nextProps, nextContext) {
     if (nextProps.categories && (!this.state.categories || this.state.categories.length <= 0)) {
       const categories = getRandomArray(nextProps.categories, 6);
-      this.setState({categories})
+      this.setState({ categories })
     }
   }
 
