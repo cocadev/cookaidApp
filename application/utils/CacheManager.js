@@ -18,7 +18,6 @@ function prefetch(uri) {
       FileSystem.getInfoAsync(path)
         .then(({ exists, isDirectory }) => {
           if(exists) {
-            // console.log('prefetch', `${uri} cached`);
             return resolve();
           } else {
             return downloadFile(uri,path)
@@ -33,7 +32,6 @@ function prefetch(uri) {
 function downloadFile(uri, path) {
   return FileSystem.downloadAsync(uri, path)
     .then(() => {
-      // console.log('prefetch', uri);
     })
 }
 
