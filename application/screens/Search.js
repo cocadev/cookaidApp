@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {NavigationActions, StackNavigator} from 'react-navigation';
+import React, { Component } from 'react';
+import { NavigationActions, StackNavigator } from 'react-navigation';
 import {
   ActivityIndicator,
   BackHandler,
@@ -10,29 +10,29 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import {Body, Container, Icon, Input, Item, List, ListItem, Right, Text} from 'native-base';
+import { Body, Container, Icon, Input, Item, List, ListItem, Right, Text } from 'native-base';
 import Icono from 'react-native-vector-icons/Ionicons';
 import ConfigApp from '../utils/ConfigApp';
-import {StringI18} from '../utils/Strings';
-import {LinearGradient} from 'expo-linear-gradient';
+import { StringI18 } from '../utils/Strings';
+import { LinearGradient } from 'expo-linear-gradient';
 
-import {Col, Grid} from 'react-native-easy-grid';
+import { Col, Grid } from 'react-native-easy-grid';
 import ListEmpty from '../components/ListEmpty';
-import {OptimizedFlatList} from 'react-native-optimized-flatlist';
-import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
-import {clearKeyword, clearSearchResult, search, searchNextPage} from '../redux/actions/searchActions';
+import { OptimizedFlatList } from 'react-native-optimized-flatlist';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { clearKeyword, clearSearchResult, search, searchNextPage } from '../redux/actions/searchActions';
 import CacheImage from "../components/CacheImage";
-import {clearRandomRecipes, fetchRandomRecipes} from "../redux/actions/recipesActions";
+import { clearRandomRecipes, fetchRandomRecipes } from "../redux/actions/recipesActions";
 import CacheImageBackground from "../components/CacheImageBackground";
 import CategoryCuisineComponent from "../components/CategoryCuisineComponent";
 
 var styles = require('../../assets/files/Styles');
-var {height, width} = Dimensions.get('window');
+var { height, width } = Dimensions.get('window');
 
 const SEARCH_TIME_THRESHOLD = 1000; // 1 second
 
-const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
   const paddingToBottom = 20;
   return layoutMeasurement.height + contentOffset.y >=
     contentSize.height - paddingToBottom;
@@ -43,7 +43,7 @@ class Search extends Component {
     header: null
   };
   componentWillMount() {
-    const {params} = this.props.navigation.state;
+    const { params } = this.props.navigation.state;
     if (!this.props.isLoading) {
       this.props.clearSearchResult();
       this.props.clearKeyword();
@@ -56,7 +56,7 @@ class Search extends Component {
 
   makeRemoteRequest = (string) => {
 
-    this.setState({string});
+    this.setState({ string });
 
     return fetch(ConfigApp.URL + 'json/data_search.php?string=' + this.state.string)
       .then((response) => response.json())
@@ -77,13 +77,13 @@ class Search extends Component {
   }
   ListEmptyView = () => {
     return (
-      <ListEmpty/>
+      <ListEmpty />
     );
   }
 
   constructor(props) {
     super(props);
-    const {params} = props.navigation.state;
+    const { params } = props.navigation.state;
     this.state = {
       isLoaded: true,
       string: params.string,
@@ -121,7 +121,7 @@ class Search extends Component {
   RecipeDetails(item) {
     const navigateAction = NavigationActions.navigate({
       routeName: 'RecipeDetailsScreen',
-      params: {item}
+      params: { item }
     });
     this.props.navigation.dispatch(navigateAction);
   }
@@ -134,24 +134,24 @@ class Search extends Component {
       <ScrollView>
         {items.map((item, index) => {
           return (
-              <TouchableOpacity key={item.id} onPress={() => this.RecipeDetails(item)} activeOpacity={1} style={{marginBottom: 5,marginLeft:5,marginRight:5}}>
-                <CacheImageBackground uri={item && item.isSpoonacular ? item.recipe_image : ConfigApp.URL + 'images/' + item.recipe_image}
-                                      style={styles.background_card}>
-                  <LinearGradient colors={['rgba(0,0,0,0.4)', 'rgba(0,0,0,0.6)']} style={styles.gradient_card}>
-                    <CategoryCuisineComponent item={item}/>
-                    <Text numberOfLines={3} style={styles.title_card}>{item.recipe_title}</Text>
-                    <View style={{flexDirection: 'row', marginTop: 3}}>
-                      <Image source={require('../../assets/images/cooktime.png')}
-                             style={{width: 15, height: 15, marginRight: 5}}/>
-                      <Text style={{fontSize: 12, color: '#fff', marginRight: 5}}>{item.recipe_time}</Text>
-                      <Image source={require('../../assets/images/calories.png')}
-                             style={{width: 15, height: 15, marginRight: 5}}/>
-                      <Text style={{fontSize: 12, color: '#fff'}}>{item.recipe_cals}</Text>
-                    </View>
+            <TouchableOpacity key={item.id} onPress={() => this.RecipeDetails(item)} activeOpacity={1} style={{ marginBottom: 5, marginLeft: 5, marginRight: 5 }}>
+              <CacheImageBackground uri={item && item.isSpoonacular ? item.recipe_image : ConfigApp.URL + 'images/' + item.recipe_image}
+                style={styles.background_card}>
+                <LinearGradient colors={['rgba(0,0,0,0.4)', 'rgba(0,0,0,0.6)']} style={styles.gradient_card}>
+                  <CategoryCuisineComponent item={item} />
+                  <Text numberOfLines={3} style={styles.title_card}>{item.recipe_title}</Text>
+                  <View style={{ flexDirection: 'row', marginTop: 3 }}>
+                    <Image source={require('../../assets/images/cooktime.png')}
+                      style={{ width: 15, height: 15, marginRight: 5 }} />
+                    <Text style={{ fontSize: 12, color: '#fff', marginRight: 5 }}>{item.recipe_time}</Text>
+                    <Image source={require('../../assets/images/calories.png')}
+                      style={{ width: 15, height: 15, marginRight: 5 }} />
+                    <Text style={{ fontSize: 12, color: '#fff' }}>{item.recipe_cals}</Text>
+                  </View>
 
-                  </LinearGradient>
-                </CacheImageBackground>
-              </TouchableOpacity>
+                </LinearGradient>
+              </CacheImageBackground>
+            </TouchableOpacity>
           )
         })}
       </ScrollView>
@@ -159,7 +159,7 @@ class Search extends Component {
   }
 
   render() {
-    const {params} = this.props.navigation.state;
+    const { params } = this.props.navigation.state;
     const isRandomRecipe = this.state.isRandomRecipe;
     const {
       isLoading,
@@ -184,10 +184,10 @@ class Search extends Component {
           width: width
         }}>
         </LinearGradient>
-        <StatusBar barStyle="dark-content"/>
+        <StatusBar barStyle="dark-content" />
 
         <ScrollView
-          onScroll={({nativeEvent}) => {
+          onScroll={({ nativeEvent }) => {
             if (isCloseToBottom(nativeEvent) && !isLoading && !isRandomRecipe) {
               this.props.searchNextPage();
             }
@@ -198,31 +198,31 @@ class Search extends Component {
           scrollEventThrottle={400}>
 
           <LinearGradient colors={['rgba(0,0,0,0.0)', 'rgba(0,0,0,0.0)']}
-                          style={{paddingTop: 45, paddingHorizontal: 30, width: width, marginBottom: 5}}>
+            style={{ paddingTop: 45, paddingHorizontal: 30, width: width, marginBottom: 5 }}>
 
             <Grid>
-              <Col style={{alignItems: 'flex-start', alignContent: 'flex-start', justifyContent: 'flex-start'}}>
+              <Col style={{ alignItems: 'flex-start', alignContent: 'flex-start', justifyContent: 'flex-start' }}>
                 <TouchableOpacity onPress={() => this.props.navigation.goBack()} activeOpacity={1}>
-                  <Icono name="md-arrow-back" style={{fontSize: 27, color: '#000'}}/>
+                  <Icono name="md-arrow-back" style={{ fontSize: 27, color: '#000' }} />
                 </TouchableOpacity>
               </Col>
-              <Col size={2} style={{alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{StringI18.t('ST19')}</Text>
+              <Col size={2} style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center' }}>
+                <Text style={{ fontSize: 16, color: '#000', fontWeight: 'bold' }}>{StringI18.t('ST19')}</Text>
               </Col>
-              <Col style={{alignItems: 'flex-end', alignContent: 'flex-end', justifyContent: 'flex-end'}}>
+              <Col style={{ alignItems: 'flex-end', alignContent: 'flex-end', justifyContent: 'flex-end' }}>
               </Col>
             </Grid>
           </LinearGradient>
 
-          <View style={{marginHorizontal: 10, marginTop: 10, marginBottom: 5}}>
-            <Item regular style={{borderRadius: 10}}>
+          <View style={{ marginHorizontal: 10, marginTop: 10, marginBottom: 5 }}>
+            <Item regular style={{ borderRadius: 10 }}>
 
-              <Icono name='md-search' style={{fontSize: 20, marginTop: 4, color: '#333', marginLeft: 20}}/>
+              <Icono name='md-search' style={{ fontSize: 20, marginTop: 4, color: '#333', marginLeft: 20 }} />
               <Input
                 placeholder={StringI18.t('ST40')}
                 onChangeText={this.onSearchChange}
                 placeholderTextColor="#a4a4a4"
-                style={{fontSize: 15, color: '#a4a4a4'}}
+                style={{ fontSize: 15, color: '#a4a4a4' }}
                 returnKeyType={"search"}
                 returnKeyLabel={"Search"}
                 onSubmitEditing={() => this.props.search(this.state.string)}
@@ -231,9 +231,9 @@ class Search extends Component {
 
           </View>
 
-          <View style={{marginHorizontal: 12, marginTop: 10, marginBottom: 5}}>
-            {this.state.word == '' && this.state.string == null ? <Text style={{fontSize: 14}}>{StringI18.t('ST108')}</Text> :
-              <Text style={{fontSize: 14}}>{StringI18.t('ST107')} <Text style={{
+          <View style={{ marginHorizontal: 12, marginTop: 10, marginBottom: 5 }}>
+            {this.state.word == '' && this.state.string == null ? <Text style={{ fontSize: 14 }}>{StringI18.t('ST108')}</Text> :
+              <Text style={{ fontSize: 14 }}>{StringI18.t('ST107')} <Text style={{
                 fontWeight: 'bold',
                 fontSize: 14
               }}> {keyword == null ? this.state.word : keyword}</Text> </Text>}
@@ -242,13 +242,13 @@ class Search extends Component {
 
           <List>
 
-            {(!isRandomRecipe && (( keyword )&& ((recipeList && recipeList.length > 0)) || isSuccess)) && this.renderList(recipeList)}
-            {( isRandomRecipe && ((homeRecipeList && homeRecipeList.length > 0) || isRandomSuccess)) && this.renderList(homeRecipeList)}
+            {(!isRandomRecipe && ((keyword) && ((recipeList && recipeList.length > 0)) || isSuccess)) && this.renderList(recipeList)}
+            {(isRandomRecipe && ((homeRecipeList && homeRecipeList.length > 0) || isRandomSuccess)) && this.renderList(homeRecipeList)}
 
           </List>
-          {isLoading && !isRandomRecipe && <ActivityIndicator style={{height: 80}} size="large" color="#DDD"/>}
-          {isRandomLoading && isRandomRecipe && <ActivityIndicator style={{height: 80}} size="large" color="#DDD"/>}
-          <View style={{height: height * 0.10}}/>
+          {isLoading && !isRandomRecipe && <ActivityIndicator style={{ height: 80 }} size="large" color="#DDD" />}
+          {isRandomLoading && isRandomRecipe && <ActivityIndicator style={{ height: 80 }} size="large" color="#DDD" />}
+          <View style={{ height: height * 0.10 }} />
 
         </ScrollView>
 
