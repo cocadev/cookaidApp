@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 class CustomPopupNotification extends React.Component {
   componentWillUnmount() {
@@ -9,12 +9,12 @@ class CustomPopupNotification extends React.Component {
   }
 
   render() {
-    const {appIconSource, appTitle, timeText, title, body} = this.props;
+    const { appIconSource, appTitle, timeText, title, body } = this.props;
     return (
       <View style={styles.popupContentContainer}>
         <View style={styles.popupHeaderContainer}>
           <View style={styles.headerIconContainer}>
-            <Image style={styles.headerIcon} source={appIconSource || null}/>
+            <Image style={styles.headerIcon} source={appIconSource || null} />
           </View>
           <View style={styles.headerTextContainer}>
             <Text style={styles.headerText} numberOfLines={1}>
@@ -28,7 +28,7 @@ class CustomPopupNotification extends React.Component {
           </View>
         </View>
         <View style={styles.contentContainer}>
-          {!!title &&<View style={styles.contentTitleContainer}>
+          {!!title && <View style={styles.contentTitleContainer}>
             <Text style={styles.contentTitle}>{title || ''}</Text>
           </View>}
           <View style={styles.contentTextContainer}>
