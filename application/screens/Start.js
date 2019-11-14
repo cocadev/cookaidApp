@@ -6,7 +6,7 @@ import BackgroundImage from "../components/BackgroundImage";
 import {Container, Body, Footer, Input, Icon, Item, Text, Toast, View, Button} from 'native-base';
 import {NavigationActions} from 'react-navigation';
 import * as firebase from 'firebase';
-import Strings from '../utils/Strings';
+import {StringI18} from '../utils/Strings';
 import ColorsApp from '../utils/ColorsApp';
 import {LinearGradient} from 'expo-linear-gradient';
 import Facebook from '../utils/Facebook';
@@ -43,7 +43,7 @@ export default class Start extends Component {
       const credentials = firebase.auth.FacebookAuthProvider.credential(token);
       firebase.auth().signInWithCredential(credentials)
         .catch(error => {
-          Toast.show({text: `${Strings.ST32}`, position: 'bottom', buttonText: `${Strings.ST33}`})
+          Toast.show({text: `${StringI18.t('ST32')}`, position: 'bottom', buttonText: `${StringI18.t('ST33')}`})
 
         })
     }
@@ -59,19 +59,19 @@ export default class Start extends Component {
           <Image source={require('../../assets/images/logo.png')} style={styles.logo_start} resizeMode="contain"/>
 
           <Button block onPress={this.login.bind(this)} style={styles.button_start}>
-            <Text style={styles.button_start_text}>{Strings.ST26.toUpperCase()}</Text>
+            <Text style={styles.button_start_text}>{StringI18.t('ST26').toUpperCase()}</Text>
           </Button>
 
           <TouchableOpacity onPress={this.register.bind(this)} activeOpacity={1}>
             <LinearGradient colors={[ColorsApp.SECOND, ColorsApp.PRIMARY]} start={[0, 0]} end={[1, 0]}
                             style={styles.button_start_2}>
-              <Text style={{color: '#FFFFFF', fontWeight: 'bold', fontSize: 14}}>{Strings.ST27.toUpperCase()}</Text>
+              <Text style={{color: '#FFFFFF', fontWeight: 'bold', fontSize: 14}}>{StringI18.t('ST27').toUpperCase()}</Text>
             </LinearGradient>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={this.facebook.bind(this)} activeOpacity={1}>
             <LinearGradient colors={['#3b5998', '#4f6eb1']} start={[0, 0]} end={[1, 0]} style={styles.button_start_2}>
-              <Text style={{color: '#FFFFFF', fontWeight: 'bold', fontSize: 14}}>{Strings.ST47.toUpperCase()}</Text>
+              <Text style={{color: '#FFFFFF', fontWeight: 'bold', fontSize: 14}}>{StringI18.t('ST47').toUpperCase()}</Text>
             </LinearGradient>
           </TouchableOpacity>
 

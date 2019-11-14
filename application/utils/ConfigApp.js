@@ -5,7 +5,7 @@ const isStandAloneApp = "standalone";
 const ConfigApp = {
 
   // backend url
-  URL: "/",
+  URL: "",
 
 
   //facebook page url
@@ -26,8 +26,8 @@ const ConfigApp = {
   TESTDEVICE_ID: isStandAloneApp ? "EMULATOR" : "EMULATOR",
   SPOONACULAR_API_URL: "",
   SPOONACULAR_API_KEY: "",
-  //SPOONACULAR_API_KEY: "",
-  HOME_MAX_RANDOM_RECIPES: 600,
+  HOME_MAX_RANDOM_RECIPES: 6,
+  PROMT_TRANSLATE_API_KEY: "",
 };
 
 export default ConfigApp;

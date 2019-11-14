@@ -1,59 +1,51 @@
 import React, {Component} from 'react';
 
-import {NavigationActions, StackNavigator, DrawerActions} from 'react-navigation';
+import {DrawerActions, NavigationActions, StackNavigator} from 'react-navigation';
 import {
-  ImageBackground,
+  BackHandler,
   Dimensions,
-  View,
   Image,
+  ImageBackground,
+  Platform,
   ScrollView,
-  SafeAreaView,
-  TouchableOpacity,
-  FlatList,
   StyleSheet,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import {
-  Container,
-  Header,
-  Content,
-  Card,
-  CardItem,
   Body,
-  Text,
-  Footer,
-  Icon,
-  Item,
-  Input,
-  FooterTab,
   Button,
+  Container,
+  Content,
+  Header,
+  Icon,
+  Input,
+  Item,
   Left,
-  Right,
-  Title,
   List,
   ListItem,
-  Thumbnail
+  Right,
+  Text,
+  Title
 } from 'native-base';
-import {Grid, Row, Col} from 'react-native-easy-grid';
+import {Col, Grid} from 'react-native-easy-grid';
 import Icono from 'react-native-vector-icons/Ionicons';
 import {LinearGradient} from 'expo-linear-gradient';
-import SwiperFlatList from 'react-native-swiper-flatlist';
-import ConfigApp from '../utils/ConfigApp';
-import RecipesHome from '../components/RecipesHome';
 import GridRecipesHome from '../components/GridRecipesHome';
 import CategoriesHome from '../components/CategoriesHome';
 import ChefsHome from '../components/ChefsHome';
-import GridView from 'react-native-super-grid';
-import Strings from '../utils/Strings';
+import Strings, {StringI18} from '../utils/Strings';
 import ColorsApp from '../utils/ColorsApp';
 import {bindActionCreators} from "redux";
 import {search} from "../redux/actions/searchActions";
 import {connect} from "react-redux";
+import Modal from 'react-native-modalbox';
+import {getListLanguages, getTargetLanguage} from "../utils/Translating";
+import {setSelectedLanguage} from "../redux/actions/homeActions";
+import Constants from 'expo-constants';
 
-
-
-
-var styles = require('../../assets/files/Styles');
-var {height, width} = Dimensions.get('window');
+const styles = require('../../assets/files/Styles');
+const {height, width} = Dimensions.get('window');
 const equalWidth = (width / 2);
 
 class Home extends Component {
@@ -76,8 +68,31 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      string: ''
+      string: '',
+      showSelectLanguageModal: false,
     };
+  }
+
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+  }
+
+  componentWillUnmount() {
+    this.backHandler.remove()
+  }
+
+  handleBackPress = () => {
+    this.goBack();
+    return true;
+  }
+
+  goBack = async () => {
+    if (!this.state.showSelectLanguageModal) {
+      BackHandler.exitApp();
+    }
+    if (this.state.showSelectLanguageModal) {
+      this.closeSelectLanguage();
+    }
   }
 
   categories() {
@@ -98,12 +113,86 @@ class Home extends Component {
 
   }
 
+  openSelectLanguage = () => {
+    this.refs.select_language.open();
+    this.onModalOpen();
+  }
+
+  closeSelectLanguage = () => {
+    this.refs.select_language.close()
+    this.onModalClose()
+  }
+
+  selectLanguage = (lang) => {
+    this.props.setSelectedLanguage(lang);
+    this.closeSelectLanguage();
+  }
+
+  onModalOpen = () => {
+    this.state.showSelectLanguageModal = true;
+  }
+
+  onModalClose = () => {
+    this.state.showSelectLanguageModal = false;
+  }
+
+  isSelectedLanguage = (lang) => {
+    const target = getTargetLanguage();
+    if (target) {
+      return lang && target === lang.code;
+    }
+    return lang && lang.code === 'en';
+  }
+
   render() {
+
+    const languageList = getListLanguages();
 
     return (
 
       <Container style={styles.background_general}>
-
+        <Modal
+          style={{width: width, flex: 1, justifyContent: 'center', alignItems: 'center'}}
+          backdropOpacity={1} position={"center"} ref='select_language' onClosed={this.onModalClose()} onOpened={this.onModalOpen()}
+          onClosingState={this.onClosingState}>
+          <Container style={{width: width, marginTop: Platform.OS === 'android' ? Constants.statusBarHeight : 0}}>
+            <Header>
+              <Left>
+                <Button transparent onPress={this.closeSelectLanguage}>
+                  <Icon name='arrow-back' />
+                </Button>
+              </Left>
+              <Body>
+                <Title>{StringI18.t('Select language', {defaultValue: Strings['Select language']})}</Title>
+              </Body>
+              <Right/>
+            </Header>
+            <Content>
+              <List style={{marginHorizontal: 10}}>
+                {
+                  languageList.map(lang => {
+                    if (this.isSelectedLanguage(lang)) {
+                      return (
+                        <ListItem key={lang.name} selected>
+                          <TouchableOpacity style={[stylesHome.languageItemContainer]} onPress={() => this.selectLanguage(lang)}>
+                            <Text style={stylesHome.textLanguage}>{lang.name}</Text>
+                          </TouchableOpacity>
+                        </ListItem>
+                      )
+                    }
+                    return (
+                      <ListItem key={lang.name}>
+                        <TouchableOpacity style={[stylesHome.languageItemContainer]} onPress={() => this.selectLanguage(lang)}>
+                          <Text style={stylesHome.textLanguage}>{lang.name}</Text>
+                        </TouchableOpacity>
+                      </ListItem>
+                    )
+                  })
+                }
+              </List>
+            </Content>
+          </Container>
+        </Modal>
         <LinearGradient colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0.2)', 'rgba(0,0,0,0.0)']} style={{
           position: 'absolute',
           top: 0,
@@ -174,7 +263,7 @@ class Home extends Component {
               </TouchableOpacity>
               <Input
                 ref={ref => this.searchInputRef = ref}
-                placeholder={Strings.ST40}
+                placeholder={StringI18.t('ST40')}
                 onChangeText={string => this.setState({string})}
                 placeholderTextColor="#a4a4a4"
                 style={{fontSize: 15, color: '#a4a4a4'}}
@@ -187,7 +276,7 @@ class Home extends Component {
           <ListItem icon style={{borderBottomWidth: 0, marginTop: -8}}>
             <Body style={{borderBottomWidth: 0}}>
             <Text
-              style={{fontSize: 14, fontWeight: 'bold', color: 'rgba(0,0,0,0.6)'}}>{Strings.ST11.toUpperCase()}</Text>
+              style={{fontSize: 14, fontWeight: 'bold', color: 'rgba(0,0,0,0.6)'}}>{StringI18.t('ST11').toUpperCase()}</Text>
             </Body>
           </ListItem>
 
@@ -203,7 +292,7 @@ class Home extends Component {
                 borderRadius: 50,
                 borderColor: 'rgba(0,0,0,0.2)'
               }}>
-                <Text style={{fontSize: 10, color: 'rgba(0,0,0,0.2)'}}> {Strings.ST43.toUpperCase()} <Icono active name="ios-arrow-forward"/></Text>
+                <Text style={{fontSize: 10, color: 'rgba(0,0,0,0.2)'}}> {StringI18.t('ST43').toUpperCase()} <Icono active name="ios-arrow-forward"/></Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -211,7 +300,7 @@ class Home extends Component {
           <ListItem icon style={{borderBottomWidth: 0}}>
             <Body style={{borderBottomWidth: 0}}>
             <Text
-                style={{fontSize: 14, fontWeight: 'bold', color: 'rgba(0,0,0,0.6)'}}>{Strings.ST13.toUpperCase()}</Text>
+                style={{fontSize: 14, fontWeight: 'bold', color: 'rgba(0,0,0,0.6)'}}>{StringI18.t('ST13').toUpperCase()}</Text>
             </Body>
           </ListItem>
 
@@ -227,7 +316,7 @@ class Home extends Component {
                 borderRadius: 50,
                 borderColor: 'rgba(0,0,0,0.2)'
               }}>
-                <Text style={{fontSize: 10, color: 'rgba(0,0,0,0.2)'}}> {Strings.ST43.toUpperCase()} <Icono active name="ios-arrow-forward"/></Text>
+                <Text style={{fontSize: 10, color: 'rgba(0,0,0,0.2)'}}> {StringI18.t('ST43').toUpperCase()} <Icono active name="ios-arrow-forward"/></Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -235,7 +324,7 @@ class Home extends Component {
           <ListItem icon style={{borderBottomWidth: 0}}>
             <Body style={{borderBottomWidth: 0}}>
             <Text
-                style={{fontSize: 14, fontWeight: 'bold', color: 'rgba(0,0,0,0.6)'}}>{Strings.ST12.toUpperCase()}</Text>
+                style={{fontSize: 14, fontWeight: 'bold', color: 'rgba(0,0,0,0.6)'}}>{StringI18.t('ST12').toUpperCase()}</Text>
             </Body>
           </ListItem>
 
@@ -253,18 +342,20 @@ class Home extends Component {
                 borderColor: 'rgba(0,0,0,0.2)'
               }}>
 
-                <Text style={{fontSize: 10, color: 'rgba(0,0,0,0.2)'}}> {Strings.ST43.toUpperCase()} <Icono active
+                <Text style={{fontSize: 10, color: 'rgba(0,0,0,0.2)'}}> {StringI18.t('ST43').toUpperCase()} <Icono active
                                                                                                             name="ios-arrow-forward"/></Text>
               </View>
             </TouchableOpacity>
           </View>
 
+          <TouchableOpacity style={stylesHome.translateButton} onPress={this.openSelectLanguage}>
+            <Image style={stylesHome.translateButtonIcon} source={require("../../assets/images/google_icon.png")}/>
+            <Text style={stylesHome.translateButtonText}>{StringI18.t('Select language', {defaultValue: Strings['Select language']})}</Text>
+          </TouchableOpacity>
 
           <View style={{height: height * 0.05}}>
           </View>
-
         </ScrollView>
-
       </Container>
 
 
@@ -276,18 +367,71 @@ const stylesHome = StyleSheet.create({
   moreBtnContainer: {
     alignItems: 'center',
     marginVertical: 12
+  },
+  translateButton: {
+    // transform: [{ scaleX: 0.8}, {scaleY: 0.8}],
+    // position: 'absolute',
+    // bottom: 24,
+    // right: 10,
+    marginTop: 9,
+    marginBottom: -15,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fcfcfc',
+    borderRadius: 5,
+    // maxWidth: 176,
+    width: 'auto',
+    height: 'auto',
+    paddingVertical: 9,
+    paddingHorizontal: 15,
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderColor: "#cccccc"
+  },
+  translateButtonText: {
+    fontSize: 16,
+    fontWeight: "normal",
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "right",
+    color: "#4a4a4a",
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    paddingLeft: 3
+  },
+  translateButtonIcon: {
+    width: 22,
+    height: 22,
+    marginRight: 6,
+    marginBottom: 2
+  },
+  textLanguage: {
+    width: '100%',
+    paddingVertical: 4,
+    textAlign: 'left'
+  },
+  languageItemContainer: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'flex-start'
+  },
+  languageItemSelected: {
+    backgroundColor: 'rgba(0,0,0,0.6)'
   }
 });
 
 const mapStateToProps = state => {
   return {
-
+    selectedLanguage: state.homeRecipes.selectedLanguage,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
     search,
+    setSelectedLanguage,
   }, dispatch)
 }
 

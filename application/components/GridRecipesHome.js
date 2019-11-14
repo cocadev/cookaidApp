@@ -1,6 +1,6 @@
 import React from 'react';
 import {NavigationActions, withNavigation} from 'react-navigation';
-import {FlatList, Image, View, ScrollView} from 'react-native';
+import {FlatList, Image, View, ScrollView, ActivityIndicator} from 'react-native';
 import {Body, Icon, List, ListItem, Right, Text} from 'native-base';
 import ConfigApp from '../utils/ConfigApp';
 import {bindActionCreators} from "redux";
@@ -115,13 +115,20 @@ class GridRecipesHome extends React.Component {
     const merge = this.mergeList();
     return (
       <List>
-        <ScrollView>
+        {(merge && merge.length > 1) && <ScrollView style={{minHeight: 200}}>
           {
             merge.map(item => {
               return this.renderItem({item})
             })
           }
-        </ScrollView>
+
+        </ScrollView>}
+        {
+          (!(merge && merge.length > 1)) &&
+          <View style={{height: 200, justifyContent: 'center', alignItems: 'center'}}>
+            <ActivityIndicator size="large" color="rgba(0,0,0,0.2)"/>
+          </View>
+        }
       </List>
     )
   }

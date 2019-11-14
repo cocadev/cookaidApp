@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
-  StatusBar
+  StatusBar, BackHandler
 } from 'react-native';
 import {
   Container,
@@ -36,7 +36,7 @@ import Icono from 'react-native-vector-icons/Ionicons';
 import {LinearGradient} from 'expo-linear-gradient';
 import ConfigApp from '../utils/ConfigApp';
 import AppPreLoader from '../components/AppPreLoader';
-import Strings from '../utils/Strings';
+import {StringI18} from '../utils/Strings';
 import {bindActionCreators} from "redux";
 import {fetchCategory} from "../redux/actions/categoryActions";
 import {connect} from "react-redux";
@@ -51,8 +51,8 @@ class Categories extends Component {
   static navigationOptions = {
     header: null
   };
-  RecipesByCategory = (category_id, category_title) => {
-    this.props.navigation.navigate('RecipesByCategoryScreen', {IdCategory: category_id, TitleCategory: category_title});
+  RecipesByCategory = (category_id, category_title, category_title_original) => {
+    this.props.navigation.navigate('RecipesByCategoryScreen', {IdCategory: category_title, TitleCategory: category_title, Category: category_title_original});
   }
   search = (string) => {
     this.props.navigation.navigate('SearchScreen', {string: ''});
@@ -69,6 +69,16 @@ class Categories extends Component {
     if (!this.props.categories) {
       this.props.fetchCategory();
     }
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+  }
+
+  componentWillUnmount() {
+    this.backHandler.remove()
+  }
+
+  handleBackPress = () => {
+    this.props.navigation.popToTop();
+    return true;
   }
 
   render() {
@@ -108,7 +118,7 @@ class Categories extends Component {
                 </TouchableOpacity>
               </Col>
               <Col size={2} style={{alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{Strings.ST2}</Text>
+                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{StringI18.t('ST2')}</Text>
               </Col>
               <Col style={{alignItems: 'flex-end', alignContent: 'flex-end', justifyContent: 'flex-end'}}>
                 <TouchableOpacity onPress={this.search.bind(this)} activeOpacity={1}>
@@ -133,7 +143,7 @@ class Categories extends Component {
               refreshing="false"
               numColumns={2}
               renderItem={({item}) =>
-                <TouchableOpacity onPress={this.RecipesByCategory.bind(this, item.category_id, item.category_title)}
+                <TouchableOpacity onPress={this.RecipesByCategory.bind(this, item.category_id, item.category_title, item.category_title_original || item.category_title)}
                                   activeOpacity={1} style={{flex: 1, marginHorizontal: 5}}>
                   <CacheImageBackground uri={ConfigApp.URL + 'images/' + item.category_image}
                                    style={{height: 110, width: null, marginBottom: 10, borderRadius: 10}}
@@ -149,7 +159,7 @@ class Categories extends Component {
                         color: '#FFF',
                         fontWeight: 'bold',
                         fontSize: 14
-                      }}>{item.category_title.toUpperCase()}</Text>
+                      }}>{StringI18.translateIfNotExist(item.category_title).toUpperCase()}</Text>
                     </LinearGradient>
                   </CacheImageBackground>
                 </TouchableOpacity>

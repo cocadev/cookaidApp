@@ -7,6 +7,8 @@ import {
 import ConfigApp from "../../utils/ConfigApp";
 import axios from "axios";
 import {cachingCategoriesImage} from "../../utils/utils";
+import apiRequest from "../../utils/apiRequest";
+import {translateObject, translating} from "../../utils/Translating";
 
 export function fetchCategory() {
   return dispatch => new Promise((resolve, reject) => {
@@ -17,6 +19,18 @@ export function fetchCategory() {
       .then((response) => {
         if (response && response.data) {
           const categories = response.data;
+         /* translating(categories, 'category_title')
+            .then(res => {
+              dispatch({
+                type: ACTION_CATEGORY_FETCH_SUCCESS,
+                categories: res,
+              })
+              cachingCategoriesImage(res);
+              return resolve();
+            })
+            .catch(err => {
+              console.log('translatingError', err);
+            });*/
           dispatch({
             type: ACTION_CATEGORY_FETCH_SUCCESS,
             categories,

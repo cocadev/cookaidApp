@@ -24,7 +24,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modalbox';
 import ConfigApp from '../utils/ConfigApp';
 import HTML from 'react-native-render-html';
-import Strings from '../utils/Strings';
+import {StringI18} from '../utils/Strings';
 import {LinearGradient} from 'expo-linear-gradient';
 import ColorsApp from '../utils/ColorsApp';
 import {Grid, Row, Col} from 'react-native-easy-grid';
@@ -101,10 +101,10 @@ export default class Register extends Component {
       const errorHandler = ((e) => {
         console.log(e);
         if (e.code == 'auth/email-already-in-use') {
-          Toast.show({text: `${Strings.ST36}`, position: 'bottom', buttonText: `${Strings.ST33}`})
+          Toast.show({text: `${StringI18.t('ST36')}`, position: 'bottom', buttonText: `${StringI18.t('ST33')}`})
 
         } else {
-          Toast.show({text: `${Strings.ST32}`, position: 'bottom', buttonText: `${Strings.ST33}`})
+          Toast.show({text: `${StringI18.t('ST32')}`, position: 'bottom', buttonText: `${StringI18.t('ST33')}`})
         }
 
       })
@@ -152,7 +152,7 @@ export default class Register extends Component {
                 </TouchableOpacity>
               </Col>
               <Col size={2} style={{alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{Strings.ST27}</Text>
+                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{StringI18.t('ST27')}</Text>
               </Col>
               <Col style={{alignItems: 'flex-end', alignContent: 'flex-end', justifyContent: 'flex-end'}}>
               </Col>
@@ -169,21 +169,21 @@ export default class Register extends Component {
 
               <Item rounded style={styles.inputLogin}>
                 <Icono name="md-person" style={{fontSize: 18, marginLeft: 18, marginRight: 5, color: '#a4a4a4'}}/>
-                <Input onChangeText={name => this.setState({name})} placeholder={Strings.ST104}
+                <Input onChangeText={name => this.setState({name})} placeholder={StringI18.t('ST104')}
                        placeholderTextColor="#a4a4a4" style={{fontSize: 16, color: '#a4a4a4'}}/>
               </Item>
 
               <Item rounded style={styles.inputLogin}>
                 <Icono name="md-mail" style={{fontSize: 18, marginLeft: 18, marginRight: 5, color: '#a4a4a4'}}/>
                 <Input onChangeText={(email) => this.validateEmail(email)} value={this.state.email}
-                       placeholder={Strings.ST105} placeholderTextColor="#a4a4a4"
+                       placeholder={StringI18.t('ST105')} placeholderTextColor="#a4a4a4"
                        style={{fontSize: 16, color: '#a4a4a4'}} autoCapitalize="none"/>
               </Item>
 
               <Item rounded style={styles.inputLogin}>
                 <Icono name="md-lock" style={{fontSize: 18, marginLeft: 18, marginRight: 5, color: '#a4a4a4'}}/>
                 <Input onChangeText={(password) => this.validatePass(password)} value={this.state.password}
-                       placeholder={Strings.ST106} placeholderTextColor="#a4a4a4"
+                       placeholder={StringI18.t('ST106')} placeholderTextColor="#a4a4a4"
                        style={{fontSize: 16, color: '#a4a4a4'}} secureTextEntry={true} autoCapitalize="none"/>
               </Item>
 
@@ -193,12 +193,12 @@ export default class Register extends Component {
             <TouchableOpacity onPress={this.register.bind(this)} activeOpacity={1}>
               <LinearGradient colors={[ColorsApp.SECOND, ColorsApp.PRIMARY]} start={[0, 0]} end={[1, 0]}
                               style={styles.button_auth}>
-                <Text style={{color: '#FFFFFF', fontWeight: 'bold', fontSize: 14}}>{Strings.ST52.toUpperCase()}</Text>
+                <Text style={{color: '#FFFFFF', fontWeight: 'bold', fontSize: 14}}>{StringI18.t('ST52').toUpperCase()}</Text>
               </LinearGradient>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={this.terms.bind(this)} activeOpacity={1}>
-              <Text style={styles.text_auth}>{Strings.ST51.toUpperCase()}</Text>
+              <Text style={styles.text_auth}>{StringI18.t('ST51').toUpperCase()}</Text>
             </TouchableOpacity>
 
 

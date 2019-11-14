@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {Dimensions, FlatList, Image, ScrollView, StatusBar, TouchableOpacity, View} from 'react-native';
+import {BackHandler, Dimensions, FlatList, Image, ScrollView, StatusBar, TouchableOpacity, View} from 'react-native';
 import {Container, Text} from 'native-base';
 import {Col, Grid} from 'react-native-easy-grid';
 import Icono from 'react-native-vector-icons/Ionicons';
 import {LinearGradient} from 'expo-linear-gradient';
 import ConfigApp from '../utils/ConfigApp';
 import AppPreLoader from '../components/AppPreLoader';
-import Strings from '../utils/Strings';
+import {StringI18} from '../utils/Strings';
 import {bindActionCreators} from "redux";
 import {fetchCuisine} from "../redux/actions/cuisineActions";
 import {withNavigation} from "react-navigation";
@@ -22,8 +22,8 @@ class ChefsScreen extends Component {
   static navigationOptions = {
     header: null
   };
-  RecipesByChef = (chef_id, chef_title) => {
-    this.props.navigation.navigate('RecipesByChefScreen', {IdChef: chef_id, TitleChef: chef_title});
+  RecipesByChef = (chef_id, chef_title, chef_title_original) => {
+    this.props.navigation.navigate('RecipesByChefScreen', {IdChef: chef_id, TitleChef: chef_title, Cuisine: chef_title_original});
   }
   search = (string) => {
     this.props.navigation.navigate('SearchScreen', {string: ''});
@@ -43,7 +43,16 @@ class ChefsScreen extends Component {
   }
 
   componentDidMount() {
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+  }
 
+  componentWillUnmount() {
+    this.backHandler.remove()
+  }
+
+  handleBackPress = () => {
+    this.props.navigation.popToTop();
+    return true;
   }
 
   render() {
@@ -84,7 +93,7 @@ class ChefsScreen extends Component {
                 </TouchableOpacity>
               </Col>
               <Col size={2} style={{alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{Strings.ST3}</Text>
+                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{StringI18.t('ST3')}</Text>
               </Col>
               <Col style={{alignItems: 'flex-end', alignContent: 'flex-end', justifyContent: 'flex-end'}}>
                 <TouchableOpacity onPress={this.search.bind(this)} activeOpacity={1}>
@@ -109,7 +118,7 @@ class ChefsScreen extends Component {
               refreshing="false"
               numColumns={3}
               renderItem={({item}) =>
-                <TouchableOpacity onPress={this.RecipesByChef.bind(this, item.chef_id, item.chef_title)}
+                <TouchableOpacity onPress={this.RecipesByChef.bind(this, item.chef_id, item.chef_title, item.chef_title)}
                                   activeOpacity={1} style={{
                   flex: 1,
                   marginHorizontal: 5,
@@ -121,7 +130,7 @@ class ChefsScreen extends Component {
                          style={{height: 80, width: 80, marginBottom: 10, borderRadius: 80 / 2}}
                          imageStyle={{borderRadius: 80 / 2}}/>
                   <Text numberOfLines={1}
-                        style={{color: '#9e9e9e', fontSize: 11, marginBottom: 5, textTransform: 'capitalize'}}>{item.chef_title}</Text>
+                        style={{color: '#9e9e9e', fontSize: 11, marginBottom: 5, textTransform: 'capitalize'}}>{StringI18.t(item.chef_title)}</Text>
                 </TouchableOpacity>
               }
               keyExtractor={(item, index) => index.toString()}

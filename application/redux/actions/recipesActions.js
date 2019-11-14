@@ -2,12 +2,18 @@ import axios from "axios";
 import ConfigApp from "../../utils/ConfigApp";
 import {
   ACTION_CLEAR_RANDOM_RESULT,
-  ACTION_FINISH_FETCHING_RANDOM, ACTION_PUSH_RESULT_RANDOM_LIST, ACTION_PUT_RESULT_RANDOM_LIST,
+  ACTION_FINISH_FETCHING_RANDOM,
+  ACTION_PUSH_RESULT_RANDOM_LIST, ACTION_PUT_RESULT_RANDOM_LIST,
   ACTION_START_FETCHING_RANDOM,
-  ACTION_UPDATE_RANDOM_OFFSET,
   ACTION_UPDATE_RECIPE
 } from "../actionTypes";
-import {convertRecipesSpoonacularToCookAid, findDuplicateInArray} from "../../utils/utils";
+import {convertRecipesSpoonacularToCookAid} from "../../utils/utils";
+import {
+  getTargetLanguage,
+  translatePromptStringArray,
+  translatePromt,
+  translateRecipe,
+} from "../../utils/Translating";
 
 export function getRecipeNutrition(recipe) {
   return dispatch => new Promise((resolve, reject) => {
@@ -28,7 +34,7 @@ export function getRecipeNutrition(recipe) {
             customNutrition: response.data,
           }
         })
-        return resolve(Object.assign(recipe, {customNutrition: response.data}));
+        return resolve(Object.assign({},{customNutrition: response.data}));
       }
       return reject({message: "invalid response"});
     }).catch((error) => {
@@ -42,6 +48,7 @@ export function getRecipeInformation(recipeId) {
     if (!recipeId) {
       return reject("invalid recipe");
     }
+    // console.log('getRecipeInformation');
     axios.get(`${ConfigApp.SPOONACULAR_API_URL}/recipes/${recipeId}/information`, {
       params: {
         includeNutrition: true,
@@ -56,14 +63,29 @@ export function getRecipeInformation(recipeId) {
             item.recipe_cals =  Math.round(filtedCal[0].amount);
           }
         }
-        dispatch({
+        translateRecipe(item)
+          .then(translated => {
+            // console.log('translated', translated)
+            dispatch({
+              type: ACTION_UPDATE_RECIPE,
+              recipe: {
+                id: recipeId,
+                ...translated,
+              }
+            });
+            return resolve(translated);
+          })
+          .catch(err => {
+            return resolve(response.data)
+          })
+       /* dispatch({
           type: ACTION_UPDATE_RECIPE,
           recipe: {
             id: recipeId,
             ... item,
           }
-        });
-        return resolve(response.data);
+        });*/
+       return;
       }
       return reject({message: "invalid response"});
     }).catch((error) => {
@@ -142,11 +164,34 @@ export function fetchRandomRecipes(number) {
     }).then(async (response) => {
       if (response && response.data) {
         try {
-          let recipes = convertRecipesSpoonacularToCookAid(response.data.recipes);
+          // const timeStart = Date.now();
+          // console.log('timeStart', Date.now());
+          let recipes = await convertRecipesSpoonacularToCookAid(response.data.recipes, null,null,null, false);
+          // console.log('timeEnd1', Date.now() - timeStart);
           recipes = await getBulkRecipeInformation(recipes);
+
+          // console.log('timeEnd2', Date.now() - timeStart);
+
+          let emptyTitle = recipes.map(item => {
+            const cloned = Object.assign({}, item);
+            cloned["recipe_title"] = null;
+            return cloned;
+          });
+
+          /*dispatch({
+            type: ACTION_PUT_RESULT_RANDOM_LIST,
+            list: emptyTitle,
+          });*/
+          const targetLanguage = getTargetLanguage();
+          let arrayRecipeTitle = recipes.map(recipe => recipe['recipe_title']);
+          let translatedRecipeTitles = await translatePromptStringArray(arrayRecipeTitle, targetLanguage);
+          translatedRecipeTitles.map((item, index) => {
+            emptyTitle[index] = Object.assign(emptyTitle[index], {recipe_title: item, recipe_title_translated: targetLanguage})
+          });
+
           dispatch({
-            type: ACTION_PUSH_RESULT_RANDOM_LIST,
-            list: recipes,
+            type: ACTION_PUT_RESULT_RANDOM_LIST,
+            list: emptyTitle,
           });
           dispatch(finishRandomFetching(true));
         } catch (e) {
@@ -160,4 +205,39 @@ export function fetchRandomRecipes(number) {
       return reject(error);
     })
   })
+}
+
+function translateMultiRecipe(recipes) {
+  return dispatch => {
+    if (!recipes || !Array.isArray(recipes)) {
+      return;
+    }
+    recipes.map(async (recipe) => {
+      // console.log('translate', recipe['recipe_title']);
+      const translatedRecipe = await translateRecipe(recipe);
+      dispatch({
+        type: ACTION_UPDATE_RECIPE,
+        recipe: translatedRecipe
+      });
+    })
+  }
+}
+
+export function translateSingleRecipe(recipe) {
+  return (dispatch) => {
+    if (!recipe) {
+      return;
+    }
+    translateRecipe(recipe)
+      .then(translatedRecipe => {
+        dispatch({
+          type: ACTION_UPDATE_RECIPE,
+          recipe: translatedRecipe
+        });
+      })
+      .catch(err => {
+        console.log('translateSingleRecipe', 'error', err)
+      })
+
+  }
 }

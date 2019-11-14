@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {View, NetInfo, Dimensions, Image} from 'react-native';
 import {Text, Button} from 'native-base';
-import Strings from '../utils/Strings';
+import Strings, {StringI18} from '../utils/Strings';
 
 const {width, height} = Dimensions.get('window');
 var styles = require('../../assets/files/Styles');
@@ -21,11 +21,11 @@ function MiniOfflineSign() {
     }}>
       <Image source={require('../../assets/images/nointernet.png')}
              style={{width: 120, height: 120, marginBottom: 10}}/>
-      <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 8}}>{Strings.ST68}</Text>
-      <Text style={{fontSize: 16, marginBottom: 30, color: '#b5b5b5'}}>{Strings.ST69}</Text>
+      <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 8}}>{StringI18.t('ST68')}</Text>
+      <Text style={{fontSize: 16, marginBottom: 30, color: '#b5b5b5'}}>{StringI18.t('ST69')}</Text>
       <View>
         <Button rounded block style={styles.button_auth}>
-          <Text>{Strings.ST70}</Text>
+          <Text>{StringI18.t('ST70')}</Text>
         </Button>
       </View>
     </View>

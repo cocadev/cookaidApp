@@ -6,7 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import AppPreLoader from './AppPreLoader';
 import ConfigApp from '../utils/ConfigApp';
 import GridView from 'react-native-super-grid';
-import Strings from '../utils/Strings';
+import {StringI18} from '../utils/Strings';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {fetchCategory} from "../redux/actions/categoryActions";
@@ -18,8 +18,8 @@ var { height, width } = Dimensions.get('window');
 
 class CategoriesHome extends React.PureComponent {
 
-  RecipesByCategory = (category_id, category_title) => {
-    this.props.navigation.navigate('RecipesByCategoryScreen', { IdCategory: category_id, TitleCategory: category_title });
+  RecipesByCategory = (category_id, category_title, category_title_original) => {
+    this.props.navigation.navigate('RecipesByCategoryScreen', { IdCategory: category_title, TitleCategory: category_title, Category: category_title_original });
   }
 
   constructor(props) {
@@ -57,13 +57,13 @@ class CategoriesHome extends React.PureComponent {
 
     return (
 
-      <View style={{ margin: 5 }}>
+      <View style={{ margin: 5, minHeight: 200 }}>
         <FlatList
           data={this.state.categories}
           refreshing="false"
           numColumns={2}
           renderItem={({ item }) =>
-            <TouchableOpacity onPress={this.RecipesByCategory.bind(this, item.category_id, item.category_title)}
+            <TouchableOpacity onPress={this.RecipesByCategory.bind(this, item.category_id, item.category_title, item.category_title_original || item.category_title)}
               activeOpacity={1} style={{ flex: 1, marginHorizontal: 5 }}>
               <View
                 style={{ height: 110, width: null, marginBottom: 10, borderRadius: 10 }}
@@ -83,7 +83,7 @@ class CategoriesHome extends React.PureComponent {
                     color: '#FFF',
                     fontWeight: 'bold',
                     fontSize: 14
-                  }}>{item.category_title.toUpperCase()}</Text>
+                  }}>{StringI18.translateIfNotExist(item.category_title).toUpperCase()}</Text>
                 </LinearGradient>
               </View>
             </TouchableOpacity>

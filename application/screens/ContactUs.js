@@ -16,7 +16,7 @@ import Icono from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/Entypo';
 import ConfigApp from '../utils/ConfigApp';
 import AppPreLoader from '../components/AppPreLoader';
-import Strings from '../utils/Strings';
+import Strings, {StringI18} from '../utils/Strings';
 import {LinearGradient} from 'expo-linear-gradient';
 import ColorsApp from '../utils/ColorsApp';
 
@@ -80,9 +80,9 @@ export default class ContactUs extends Component {
               onPress: () => {},
               appIconSource: require('../../assets/icon-android.png'),
               appTitle: Strings.AppName,
-              timeText: 'DISMISS',
+              timeText: StringI18.t('Dismiss'),
               title: null,
-              body: Strings.YourMessageSent,
+              body: StringI18.t('YourMessageSent'),
               slideOutTime: 3600 * 1000,
             });
           }
@@ -142,7 +142,7 @@ export default class ContactUs extends Component {
                 </TouchableOpacity>
               </Col>
               <Col size={2} style={{alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{Strings.ST73}</Text>
+                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{StringI18.t('ST73')}</Text>
               </Col>
               <Col style={{alignItems: 'flex-end', alignContent: 'flex-end', justifyContent: 'flex-end'}}>
               </Col>
@@ -167,26 +167,26 @@ export default class ContactUs extends Component {
                 fontWeight: 'bold',
                 textAlign: 'center'
               }}>
-                {Strings.ST76}
+                {StringI18.t('ST76')}
               </Text>
 
               <Text style={{color: '#888888', fontSize: 14, textAlign: 'center'}}>
-                {Strings.ST77}
+                {StringI18.t('ST77')}
               </Text>
 
               <Form style={{marginBottom: 35, marginTop: 25}}>
                 <Item stackedLabel last>
-                  <Label style={{color: '#888888', fontSize: 15}}>{Strings.ST78}</Label>
+                  <Label style={{color: '#888888', fontSize: 15}}>{StringI18.t('ST78')}</Label>
                   <Input onChangeText={UserName => this.setState({UserName})} style={{fontSize: 15}}/>
                 </Item>
 
                 <Item stackedLabel last>
-                  <Label style={{color: '#888888', fontSize: 15}}>{Strings.ST79}</Label>
+                  <Label style={{color: '#888888', fontSize: 15}}>{StringI18.t('ST79')}</Label>
                   <Input onChangeText={UserEmail => this.setState({UserEmail})} style={{fontSize: 15}}
                          autoCapitalize="none"/>
                 </Item>
 
-                <Textarea rowSpan={3} bordered placeholder={Strings.ST80} placeholderTextColor="#888888"
+                <Textarea rowSpan={3} bordered placeholder={StringI18.t('ST80')} placeholderTextColor="#888888"
                           onChangeText={UserMessage => this.setState({UserMessage})} style={{
                   fontSize: 15,
                   marginTop: 15,
@@ -202,7 +202,7 @@ export default class ContactUs extends Component {
                   <LinearGradient colors={[ColorsApp.SECOND, ColorsApp.PRIMARY]} start={[0, 0]} end={[1, 0]}
                                   style={styles.button_start_2} activeOpacity={1}>
                     <Text
-                      style={{color: '#FFFFFF', fontWeight: 'bold', fontSize: 14}}>{Strings.ST81.toUpperCase()}</Text>
+                      style={{color: '#FFFFFF', fontWeight: 'bold', fontSize: 14}}>{StringI18.t('ST81').toUpperCase()}</Text>
                   </LinearGradient>
                 </TouchableOpacity>
               </View>

@@ -5,7 +5,7 @@ import {Body, Container, Left, List, ListItem, Right, Text} from 'native-base';
 import Icono from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/Entypo';
 import ConfigApp from '../utils/ConfigApp';
-import Strings from '../utils/Strings';
+import {StringI18} from '../utils/Strings';
 import {LinearGradient} from 'expo-linear-gradient';
 import ColorsApp from '../utils/ColorsApp';
 import app from '../../app.json';
@@ -70,7 +70,7 @@ export default class Settings extends Component {
                 </TouchableOpacity>
               </Col>
               <Col size={2} style={{alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{Strings.ST7}</Text>
+                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{StringI18.t('ST7')}</Text>
               </Col>
               <Col style={{alignItems: 'flex-end', alignContent: 'flex-end', justifyContent: 'flex-end'}}>
               </Col>
@@ -98,7 +98,7 @@ export default class Settings extends Component {
                 fontWeight: 'bold',
                 bottom: 0,
               }}>
-                Version {app.expo.version}
+                {StringI18.t('Version')} {app.expo.version}
                 </Text>
             </Row>
           </Grid>
@@ -115,7 +115,7 @@ export default class Settings extends Component {
                 <Text style={{
                   fontWeight: 'bold',
                   color: '#797979'
-                }}>{Strings.ST9}</Text>
+                }}>{StringI18.t('ST9')}</Text>
                 </Body>
                 <Right style={{borderBottomWidth: 0}}>
                 </Right>
@@ -130,7 +130,7 @@ export default class Settings extends Component {
                 <Text style={{
                   fontWeight: 'bold',
                   color: '#797979',
-                }}>{Strings.ST82}</Text>
+                }}>{StringI18.t('ST82')}</Text>
                 </Body>
                 <Right style={{borderBottomWidth: 0}}>
                 </Right>
@@ -145,7 +145,7 @@ export default class Settings extends Component {
                 <Text style={{
                   fontWeight: 'bold',
                   color: '#797979',
-                }}>{Strings.ST75}</Text>
+                }}>{StringI18.t('ST75')}</Text>
                 </Body>
                 <Right style={{borderBottomWidth: 0}}>
                 </Right>

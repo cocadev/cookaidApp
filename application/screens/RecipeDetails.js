@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import {StackNavigator} from 'react-navigation';
+import ModalZoomImage from "../components/ModalZoomImage";
+
 import {
-  AsyncStorage,
+  ActivityIndicator,
+  AsyncStorage, BackHandler,
   Dimensions,
   FlatList,
   Image,
@@ -15,9 +18,9 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icono from 'react-native-vector-icons/Ionicons';
 import {Col, Grid} from 'react-native-easy-grid';
-import {Container, Text} from 'native-base';
+import {Container, Text, Toast} from 'native-base';
 import ConfigApp from '../utils/ConfigApp';
-import Strings from '../utils/Strings';
+import {StringI18} from '../utils/Strings';
 import HTML from 'react-native-render-html';
 
 import {LinearGradient} from 'expo-linear-gradient';
@@ -32,11 +35,13 @@ import {ScreenOrientation} from '@ionic-native/screen-orientation';
 import CategoryCuisineComponent from "../components/CategoryCuisineComponent";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {getRecipeInformation, getRecipeNutrition} from "../redux/actions/recipesActions";
+import {getRecipeInformation, getRecipeNutrition, translateSingleRecipe} from "../redux/actions/recipesActions";
 import CacheImageBackground from "../components/CacheImageBackground";
 import CacheImage from "../components/CacheImage";
 import CacheManager from "../utils/CacheManager";
 import NumericInput from "react-native-numeric-input";
+import recipes from "../redux/reducers/recipesReducer";
+import {getTargetLanguage} from "../utils/Translating";
 
 var styles = require('../../assets/files/Styles');
 const {height, width} = Dimensions.get('window');
@@ -61,6 +66,11 @@ class RecipeDetails extends Component {
       })
       recipesItems.push(item);
       AsyncStorage.setItem('recipes', JSON.stringify(recipesItems)).then(() => {
+        Toast.show({
+          text: StringI18.t('Recipe added to favourites'),
+          textStyle: { textAlign: 'center' },
+          position: 'bottom'
+        });
       });
       this.checkFavourite();
     } catch (error) {
@@ -77,6 +87,12 @@ class RecipeDetails extends Component {
       })
 
       await AsyncStorage.setItem('recipes', JSON.stringify(recipesItems));
+      // Recipe removed from favourites
+      Toast.show({
+        text: StringI18.t('Recipe removed from favourites'),
+        textStyle: { textAlign: 'center' },
+        position: 'bottom'
+      });
       this.checkFavourite();
     } catch (error) {
 
@@ -112,9 +128,22 @@ class RecipeDetails extends Component {
       nutritionFilter: null,
       measure: null,
       serving: params && params.item && params.item.servings,
+      language: getTargetLanguage(),
+    visibleModal :false,
     };
     this.checkFavourite();
+    if (params.item && params.item.language !== getTargetLanguage()) {
+      this.props.translateSingleRecipe(params.item);
+    }
   }
+
+    showModal = () =>{
+        this.setState({ visibleModal: true });
+    }
+
+    hideModal = () =>{
+        this.setState({ visibleModal: false });
+    }
 
   componentWillMount() {
     if (this.props.navigation
@@ -132,7 +161,7 @@ class RecipeDetails extends Component {
         .then(item => {
 
           this.setState(prevState => ({
-            item: Object.assign(prevState.item, item)
+            item: Object.assign({}, item, prevState.item)
           }))
         })
         .catch(err => {
@@ -188,13 +217,25 @@ class RecipeDetails extends Component {
       && !this.props.navigation.state.params.item.customNutrition) {
       this.props.getRecipeNutrition(this.props.navigation.state.params.item)
         .then(item => {
-          this.setState({item});
+          this.setState(prevState => ({
+            item: Object.assign({}, prevState.item, item)
+          }))
         })
         .catch(err => {
 
         })
     }
 
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+  }
+
+  componentWillUnmount() {
+    this.backHandler.remove()
+  }
+
+  handleBackPress = () => {
+    this.props.navigation.popToTop();
+    return true;
   }
 
   openVideo() {
@@ -251,7 +292,7 @@ class RecipeDetails extends Component {
         marginLeft: -1,
         backgroundColor: ColorsApp.PRIMARY
       }}>
-        <Text style={{color: '#FFF', fontSize: 11, textTransform: 'capitalize'}}>{item.category_title || item.chef_title}</Text>
+        <Text style={{color: '#FFF', fontSize: 11, textTransform: 'capitalize'}}>{StringI18.translateIfNotExist(item.category_title) || StringI18.translateIfNotExist(item.chef_title)}</Text>
       </LinearGradient>
     )
   }
@@ -270,7 +311,7 @@ class RecipeDetails extends Component {
           padding: 5,
           textTransform: 'capitalize'
         }}>
-        {item.chef_title}
+        {StringI18.t(item.chef_title)}
       </Text>
     )
   }
@@ -308,14 +349,20 @@ class RecipeDetails extends Component {
       if (unit) {
         switch (unit.toLowerCase()) {
           case "tsbp":
-            unit = "teaspoons";
+            unit = StringI18.t("teaspoons");
             break;
 
           case "tbsps":
-            unit = "tablespoons";
+            unit = StringI18.t("tablespoons");
+            break;
+
+          case "tbsp":
+            unit = StringI18.t("tablespoon");
             break;
         }
+
       }
+      unit = StringI18.t(unit, {defaultValue:  unit}) || unit;
 
       /*if (!(itemIngredient && itemIngredient['measures'] && itemIngredient['measures']['metric'] && itemIngredient['measures']['us'])) {
         if (itemIngredient) {
@@ -333,8 +380,19 @@ class RecipeDetails extends Component {
       return null;
     }
   }
+
+  renderLoading = () => {
+    return (
+      <View style={{height: 100, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="rgba(0,0,0,0.2)"/>
+      </View>
+    )
+  }
   renderExtendedIngredientsItem = ({item}) => {
     let text = this.getIngredientText(item);
+    if (this.state.item && this.state.item.language !== this.state.language) {
+      return this.renderLoading();
+    }
     return (
       <View style={{
         flexDirection: 'row',
@@ -368,7 +426,7 @@ class RecipeDetails extends Component {
       <View style={stylesDetail.buttonSwitchMetricContainer} key={"1"}>
         <View>
           <Text style={[stylesDetail.textUnitTitle, {color: '#585858'}]}>
-            {serving > 1 ? 'Servings' : 'Serving'}
+            {serving > 1 ? StringI18.t('servings') : StringI18.t('serving')}
           </Text>
           <NumericInput
             onChange={value => this.setCurrentServing(value)}
@@ -382,7 +440,7 @@ class RecipeDetails extends Component {
         </View>
         <View style={{alignItems: 'flex-end'}}>
           <Text style={[stylesDetail.textUnitTitle, {color: '#585858'}]}>
-            Units
+            {StringI18.t('Units')}
           </Text>
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity onPress={() => this.setState({measure: 'metric'})}>
@@ -392,7 +450,7 @@ class RecipeDetails extends Component {
                 end={[1, 0]}
                 style={stylesDetail.buttonSwitchMetric}>
                 <Text style={stylesDetail.buttonSwitchTextActive}>
-                  Metric
+                  {StringI18.t("Metric", {defaultValue: "Metric"})}
                 </Text>
               </LinearGradient>
             </TouchableOpacity>
@@ -415,6 +473,9 @@ class RecipeDetails extends Component {
   }
 
   renderIngredients = (item) => {
+    if (this.state.item && this.state.item.language !== this.state.language) {
+      return this.renderLoading();
+    }
     if (item.recipe_ingredients && typeof item.recipe_ingredients == "string") {
       return (
         <HTML html={item.recipe_ingredients} onLinkPress={(evt, href) => {
@@ -447,36 +508,37 @@ class RecipeDetails extends Component {
         />
       ])
     }
+    return this.renderLoading();
   }
 
   renderNutritionChart = () => {
     const {item, nutritionFilter} = this.state;
     if (!item || !item.customNutrition) {
-      return;
+      return this.renderLoading();
     }
     return (
       <View style={{flexDirection: 'column', minHeight: 200}}>
-        <Text style={[stylesDetail.nutritionTitle, {fontSize: 16, color: '#585858', marginBottom: 12}]}>Nutrition per serving</Text>
-        <Text style={[stylesDetail.nutritionTitle, {fontSize: 15, color: '#585858', marginBottom: 9}]}>QuickView</Text>
+        <Text style={[stylesDetail.nutritionTitle, {fontSize: 16, color: '#585858', marginBottom: 12}]}>{StringI18.t('Nutrition_per_serving')}</Text>
+        <Text style={[stylesDetail.nutritionTitle, {fontSize: 15, color: '#585858', marginBottom: 9}]}>{StringI18.t('QuickView')}</Text>
         <View style={{flexDirection: 'row', maxWidth: '100%', flexWrap: 'nowrap'}}>
           {!!item.customNutrition.calories && <TouchableOpacity style={{flex: 1}} onPress={() => this.setNutritionFilter('Calories')}>
             <Text numberOfLines={1} style={[stylesDetail.nutriChartBox, {color: '#585858', opacity: !nutritionFilter || nutritionFilter === "Calories" ? 1 : inactiveOpacity}]}>
-              {item.customNutrition.calories} Cals
+              {item.customNutrition.calories} {StringI18.t('Cals')}
             </Text>
           </TouchableOpacity>}
           {!!item.customNutrition.calories && <TouchableOpacity style={{flex: 1}} onPress={() => this.setNutritionFilter('Protein')}>
             <Text numberOfLines={1} style={[stylesDetail.nutriChartBox, {color: '#585858', opacity: !nutritionFilter || nutritionFilter === "Protein" ? 1 : inactiveOpacity}]}>
-              {item.customNutrition.protein} Protein
+              {item.customNutrition.protein} {StringI18.t('Protein')}
             </Text>
           </TouchableOpacity>}
           {!!item.customNutrition.calories && <TouchableOpacity style={{flex: 1}} onPress={() => this.setNutritionFilter('Fat')}>
             <Text numberOfLines={1} style={[stylesDetail.nutriChartBox, {color: '#585858', opacity: !nutritionFilter || nutritionFilter === "Fat" ? 1 : inactiveOpacity}]}>
-              {item.customNutrition.fat} Fat
+              {item.customNutrition.fat} {StringI18.t('Fat')}
             </Text>
           </TouchableOpacity>}
           {!!item.customNutrition.calories && <TouchableOpacity style={{flex: 1}} onPress={() => this.setNutritionFilter('Carbohydrates')}>
             <Text numberOfLines={1} style={[stylesDetail.nutriChartBox, {color: '#585858', marginRight: 0,opacity: !nutritionFilter || nutritionFilter === "Carbohydrates" ? 1 : inactiveOpacity}]}>
-              {item.customNutrition.carbs} Carbs
+              {item.customNutrition.carbs} {StringI18.t('Carbs')}
             </Text>
           </TouchableOpacity>}
         </View>
@@ -488,13 +550,13 @@ class RecipeDetails extends Component {
             {
               !!item.healthScore &&
               <Text style={{color: '#585858'}}>
-                {item.healthScore}% Health Score
+                {item.healthScore}% {StringI18.t('Health Score')}
               </Text>
             }
           </View>
         </View>
         <Text style={[stylesDetail.nutriSectionTitle, stylesDetail.colorSalmon]}>
-          Limit These
+          {StringI18.t('Limit These')}
         </Text>
         {
           item.customNutrition && item.customNutrition.bad && item.customNutrition.bad.map((badItem, index) => {
@@ -503,7 +565,7 @@ class RecipeDetails extends Component {
             return (
               <View key={index} style={[stylesDetail.row, {marginTop: 4}, {opacity: !nutritionFilter || nutritionFilter === title ? 1 : inactiveOpacity}]}>
                 <Text style={[stylesDetail.nutritionName, {fontSize: 14, color: '#585858'}]}>
-                  {title}
+                  {StringI18.t(title, {defaultValue:  title})}
                 </Text>
                 <Text style={[stylesDetail.nutritionValue, {fontSize: 14, color: '#585858'}]}>
                   {amount}
@@ -521,7 +583,7 @@ class RecipeDetails extends Component {
         }
 
         <Text style={[stylesDetail.nutriSectionTitle, stylesDetail.colorBlue]}>
-          Get Enough Of These
+          {StringI18.t('Get Enough Of These')}
         </Text>
         {
           item.customNutrition && item.customNutrition.good && item.customNutrition.good.map((goodItem, index) => {
@@ -530,7 +592,7 @@ class RecipeDetails extends Component {
             return (
               <View key={index} style={[stylesDetail.row, {marginTop: 4}, {opacity: !nutritionFilter || nutritionFilter === title ? 1 : inactiveOpacity}]}>
                 <Text style={[stylesDetail.nutritionName, {fontSize: 14, color: '#585858'}]}>
-                  {title}
+                  {StringI18.t(title, {defaultValue:  title})}
                 </Text>
                 <Text style={[stylesDetail.nutritionValue, {fontSize: 14, color: '#585858'}]}>
                   {amount}
@@ -552,7 +614,7 @@ class RecipeDetails extends Component {
           <View style={[stylesDetail.backgroundBlue, {width: 12, height: 12, marginHorizontal: 8}]}>
           </View>
           <Text style={{color: "#585858", fontSize: 15}}>
-             Percentage of daily need
+             {StringI18.t('Percentage of daily need')}
           </Text>
         </View>
       </View>
@@ -560,13 +622,16 @@ class RecipeDetails extends Component {
   }
 
   renderSteps = (item) => {
+    if (this.state.item && this.state.item.language !== this.state.language) {
+      return this.renderLoading();
+    }
     if (!item || !item.analyzedInstructions || !item.analyzedInstructions[0] || !item.analyzedInstructions[0].steps) {
       /*return (
         <HTML html={item.recipe_directions} onLinkPress={(evt, href) => {
           Linking.openURL(href);
         }}/>
       )*/
-      return null;
+      return this.renderLoading();
     }
     if (item.analyzedInstructions[0].steps && !Array.isArray(item.analyzedInstructions[0].steps)) {
       /*return (
@@ -655,44 +720,48 @@ class RecipeDetails extends Component {
             </Col>
           </Grid>
         </LinearGradient>
+          <ModalZoomImage visible={this.state.visibleModal}  onClose={this.hideModal} src={item.isSpoonacular ? item.recipe_image : ConfigApp.URL + 'images/' + item.recipe_image}/>
+          <TouchableOpacity  onPress={this.showModal} style={{height: height * 0.40, alignItems: 'flex-start', justifyContent: 'flex-end'}}>
+              <CacheImageBackground
+                  uri={item.isSpoonacular ? item.recipe_image : ConfigApp.URL + 'images/' + item.recipe_image}
+                  style={{height: height * 0.40, alignItems: 'flex-start', justifyContent: 'flex-end'}}
+                  resizeMode="cover">
+                  <View style={{
+                      position: 'absolute',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      zIndex: 120,
+                      width: width,
+                      height: height * 0.40
+                  }}>
 
-        <CacheImageBackground
-          uri={item.isSpoonacular ? item.recipe_image : ConfigApp.URL + 'images/' + item.recipe_image}
-          style={{height: height * 0.40, alignItems: 'flex-start', justifyContent: 'flex-end'}}
-          resizeMode="cover">
-          <View style={{
-            position: 'absolute',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 120,
-            width: width,
-            height: height * 0.40
-          }}>
+                      {item.recipe_video == '' ? <Text></Text> :
 
-            {item.recipe_video == '' ? <Text></Text> :
-
-              <TouchableOpacity onPress={() => this.openVideo()} activeOpacity={1}>
-                <View style={{backgroundColor: 'rgba(0,0,0,0.05)', borderRadius: 100}}>
-                  <Icon name="play-circle-outline" style={{fontSize: 55, color: '#FFFFFF'}}/>
-                </View>
-              </TouchableOpacity>
-            }
+                          <TouchableOpacity onPress={() => this.openVideo()} activeOpacity={1}>
+                              <View style={{backgroundColor: 'rgba(0,0,0,0.05)', borderRadius: 100}}>
+                                  <Icon name="play-circle-outline" style={{fontSize: 55, color: '#FFFFFF'}}/>
+                              </View>
+                          </TouchableOpacity>
+                      }
 
 
-          </View>
-          <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.15)', 'rgba(0,0,0,0.55)']} style={{
-            height: height * 0.30,
-            width: width,
-            paddingHorizontal: 20,
-            alignItems: 'flex-start',
-            justifyContent: 'flex-end',
-            paddingBottom: 20
-          }}>
-            <CategoryCuisineComponent item={item}/>
-            <Text numberOfLines={2}
-                  style={{fontSize: 18, fontWeight: 'bold', color: '#FFF', marginBottom: 5}}>{item.recipe_title}</Text>
-          </LinearGradient>
-        </CacheImageBackground>
+                  </View>
+                  <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.15)', 'rgba(0,0,0,0.55)']} style={{
+                      height: height * 0.30,
+                      width: width,
+                      paddingHorizontal: 20,
+                      alignItems: 'flex-start',
+                      justifyContent: 'flex-end',
+                      paddingBottom: 20,
+                      zIndex: 120,
+                  }}>
+                      <CategoryCuisineComponent item={item} isCategoryButton={true}/>
+                      <Text numberOfLines={2}
+                            style={{fontSize: 18, fontWeight: 'bold', color: '#FFF', marginBottom: 5}}>{item.recipe_title}</Text>
+                  </LinearGradient>
+              </CacheImageBackground>
+          </TouchableOpacity>
+
         <ScrollView>
 
           <Grid style={{marginTop: 22, marginBottom: 19}}>
@@ -701,7 +770,7 @@ class RecipeDetails extends Component {
               <Image source={require('../../assets/images/cooktime.png')}
                      style={{width: 30, height: 30, marginBottom: 7}} resizeMode="contain"/>
 
-              <Text style={{textAlign: 'center', alignItems: 'center', alignContent: 'center', justifyContent: 'center', fontSize: 14, marginBottom: 3, color: 'rgba(0,0,0,0.5)'}}>{Strings.ST16}</Text>
+              <Text style={{textAlign: 'center', alignItems: 'center', alignContent: 'center', justifyContent: 'center', fontSize: 14, marginBottom: 3, color: 'rgba(0,0,0,0.5)'}}>{StringI18.t('ST16')}</Text>
               <Text style={{color: '#585858', fontSize: 14, fontWeight: 'bold',}}>{item.recipe_time}</Text>
 
             </Col>
@@ -710,7 +779,7 @@ class RecipeDetails extends Component {
 
               <Image source={require('../../assets/images/servings.png')}
                      style={{width: 30, height: 30, marginBottom: 7}} resizeMode="contain"/>
-              <Text style={{textAlign: 'center', alignItems: 'center', alignContent: 'center', justifyContent: 'center', fontSize: 14, marginBottom: 3, color: 'rgba(0,0,0,0.5)'}}>{Strings.ST15}</Text>
+              <Text style={{textAlign: 'center', alignItems: 'center', alignContent: 'center', justifyContent: 'center', fontSize: 14, marginBottom: 3, color: 'rgba(0,0,0,0.5)'}}>{StringI18.t('ST15')}</Text>
               <Text style={{color: '#585858', fontSize: 14, fontWeight: 'bold',}}>{item.recipe_servings}</Text>
 
             </Col>
@@ -719,7 +788,7 @@ class RecipeDetails extends Component {
 
               <Image source={require('../../assets/images/calories.png')}
                      style={{width: 30, height: 30, marginBottom: 7}} resizeMode="contain"/>
-              <Text style={{textAlign: 'center', alignItems: 'center', alignContent: 'center', justifyContent: 'center', fontSize: 14, marginBottom: 3, color: 'rgba(0,0,0,0.5)'}}>{Strings.ST17}</Text>
+              <Text style={{textAlign: 'center', alignItems: 'center', alignContent: 'center', justifyContent: 'center', fontSize: 14, marginBottom: 3, color: 'rgba(0,0,0,0.5)'}}>{StringI18.t('ST17')}</Text>
               <Text style={{color: '#585858', fontSize: 14, fontWeight: 'bold',}}>{item.recipe_cals}</Text>
 
             </Col>
@@ -733,7 +802,7 @@ class RecipeDetails extends Component {
             <CollapseHeader>
               <LinearGradient colors={[ColorsApp.SECOND, ColorsApp.PRIMARY]} start={[0, 0]} end={[1, 0]}
                               style={styles.collapseStyle}>
-                <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 13}}>{Strings.ST21.toUpperCase()}</Text>
+                <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 13}}>{StringI18.t('ST21').toUpperCase()}</Text>
               </LinearGradient>
             </CollapseHeader>
             <CollapseBody>
@@ -750,7 +819,7 @@ class RecipeDetails extends Component {
             <CollapseHeader>
               <LinearGradient colors={[ColorsApp.SECOND, ColorsApp.PRIMARY]} start={[0, 0]} end={[1, 0]}
                               style={styles.collapseStyle}>
-                <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 13}}>{Strings.ST22.toUpperCase()}</Text>
+                <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 13}}>{StringI18.t('ST22').toUpperCase()}</Text>
               </LinearGradient>
             </CollapseHeader>
             <CollapseBody>
@@ -769,7 +838,7 @@ class RecipeDetails extends Component {
             <CollapseHeader>
               <LinearGradient colors={[ColorsApp.SECOND, ColorsApp.PRIMARY]} start={[0, 0]} end={[1, 0]}
                               style={styles.collapseStyle}>
-                <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 13}}>{"NUTRITIONAL INFORMATION"}</Text>
+                <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 13}}>{StringI18.t("NUTRITIONAL_INFORMATION")}</Text>
               </LinearGradient>
             </CollapseHeader>
             <CollapseBody>
@@ -783,7 +852,7 @@ class RecipeDetails extends Component {
             <CollapseHeader>
               <LinearGradient colors={[ColorsApp.SECOND, ColorsApp.PRIMARY]} start={[0, 0]} end={[1, 0]}
                               style={styles.collapseStyle}>
-                <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 13}}>{Strings.ST109.toUpperCase()}</Text>
+                <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 13}}>{StringI18.t('ST109').toUpperCase()}</Text>
               </LinearGradient>
             </CollapseHeader>
             <CollapseBody>
@@ -825,7 +894,7 @@ class RecipeDetails extends Component {
 
           <TouchableOpacity onPress={() => this.videoClose()}
                             style={{alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 40}}>
-            <Text style={{color: '#FFF'}}>{Strings.ST60}</Text>
+            <Text style={{color: '#FFF'}}>{StringI18.t('ST60')}</Text>
           </TouchableOpacity>
 
         </Modal>
@@ -960,13 +1029,17 @@ const stylesDetail = StyleSheet.create({
     flexWrap: 'wrap',
     // fontWeight: 'bold',
     fontSize: 16,
+    lineHeight: 16 * 1.5,
     color: '#585858',
   }
 });
 
 const mapStateToProps = state => {
   return {
-
+    homeRecipeList: state.homeRecipes.homeRecipeList,
+    recipeList: state.recipes.recipeList,
+    recipesByCuisine: state.recipes.recipesByCuisine,
+    recipesByCategory: state.recipes.recipesByCategory,
   }
 }
 
@@ -974,6 +1047,7 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators({
     getRecipeNutrition,
     getRecipeInformation,
+    translateSingleRecipe,
   }, dispatch)
 }
 

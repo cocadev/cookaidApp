@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/Entypo';
 import {Container, Text} from 'native-base';
 import ConfigApp from '../utils/ConfigApp';
 import HTML from 'react-native-render-html';
-import Strings from '../utils/Strings';
+import {StringI18} from '../utils/Strings';
 
 
 var styles = require('../../assets/files/Styles');
@@ -83,7 +83,7 @@ export default class Terms extends Component {
                 </TouchableOpacity>
               </Col>
               <Col size={2} style={{alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{Strings.ST20}</Text>
+                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{StringI18.t('ST20')}</Text>
               </Col>
               <Col style={{alignItems: 'flex-end', alignContent: 'flex-end', justifyContent: 'flex-end'}}>
               </Col>

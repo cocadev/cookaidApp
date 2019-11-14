@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Image, View, Dimensions, Text} from 'react-native';
 import {NavigationActions, withNavigation} from 'react-navigation';
-import Strings from '../utils/Strings';
+import Strings, {StringI18} from '../utils/Strings';
 
 
 const {width, height} = Dimensions.get('window');
@@ -21,7 +21,7 @@ class ListEmpty extends React.Component {
       }}>
         <Image source={require('../../assets/images/chef.png')} style={{width: 70, height: 70, marginBottom: 20}}
                resizeMode="contain"/>
-        <Text style={{fontSize: 13, marginBottom: 15, color: '#a4a4a4'}}>{Strings.ST67.toUpperCase()}</Text>
+        <Text style={{fontSize: 13, marginBottom: 15, color: '#a4a4a4'}}>{StringI18.t('ST67').toUpperCase()}</Text>
       </View>
 
     )

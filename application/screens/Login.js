@@ -29,7 +29,7 @@ import ColorsApp from '../utils/ColorsApp';
 import {StatusBar} from "react-native";
 import {Grid, Row, Col} from 'react-native-easy-grid';
 
-import Strings from '../utils/Strings';
+import {StringI18} from '../utils/Strings';
 
 var width = Dimensions.get('window').width;
 
@@ -62,16 +62,16 @@ export default class Login extends Component {
           const errorMessage = error.message;
           if (errorCode === 'auth/wrong-password') {
 
-            Toast.show({text: `${Strings.ST30}`, position: 'bottom', buttonText: `${Strings.ST33}`})
+            Toast.show({text: `${StringI18.t('ST30')}`, position: 'bottom', buttonText: `${StringI18.t('ST33')}`})
 
           }
           else if (errorCode === 'auth/user-not-found') {
 
-            Toast.show({text: `${Strings.ST31}`, position: 'bottom', buttonText: `${Strings.ST33}`})
+            Toast.show({text: `${StringI18.t('ST31')}`, position: 'bottom', buttonText: `${StringI18.t('ST33')}`})
 
           }
           else {
-            Toast.show({text: `${Strings.ST32}`, position: 'bottom', buttonText: `${Strings.ST33}`})
+            Toast.show({text: `${StringI18.t('ST32')}`, position: 'bottom', buttonText: `${StringI18.t('ST33')}`})
           }
 
         });
@@ -114,7 +114,7 @@ export default class Login extends Component {
                 </TouchableOpacity>
               </Col>
               <Col size={2} style={{alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{Strings.ST26}</Text>
+                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{StringI18.t('ST26')}</Text>
               </Col>
               <Col style={{alignItems: 'flex-end', alignContent: 'flex-end', justifyContent: 'flex-end'}}>
               </Col>
@@ -131,13 +131,13 @@ export default class Login extends Component {
 
               <Item rounded style={styles.inputLogin}>
                 <Icono name="md-mail" style={{fontSize: 18, marginLeft: 18, marginRight: 5, color: '#a4a4a4'}}/>
-                <Input onChangeText={email => this.setState({email})} placeholder={Strings.ST105}
+                <Input onChangeText={email => this.setState({email})} placeholder={StringI18.t('ST105')}
                        placeholderTextColor="#a4a4a4" style={{fontSize: 16, color: '#a4a4a4'}} autoCapitalize="none"/>
               </Item>
 
               <Item rounded style={styles.inputLogin}>
                 <Icono name="md-lock" style={{fontSize: 18, marginLeft: 18, marginRight: 5, color: '#a4a4a4'}}/>
-                <Input onChangeText={password => this.setState({password})} placeholder={Strings.ST106}
+                <Input onChangeText={password => this.setState({password})} placeholder={StringI18.t('ST106')}
                        placeholderTextColor="#a4a4a4" style={{fontSize: 16, color: '#a4a4a4'}} secureTextEntry={true}
                        autoCapitalize="none"/>
               </Item>
@@ -147,12 +147,12 @@ export default class Login extends Component {
             <TouchableOpacity onPress={this.login.bind(this)} activeOpacity={1}>
               <LinearGradient colors={[ColorsApp.SECOND, ColorsApp.PRIMARY]} start={[0, 0]} end={[1, 0]}
                               style={styles.button_auth}>
-                <Text style={{color: '#FFFFFF', fontWeight: 'bold', fontSize: 14}}>{Strings.ST28.toUpperCase()}</Text>
+                <Text style={{color: '#FFFFFF', fontWeight: 'bold', fontSize: 14}}>{StringI18.t('ST28').toUpperCase()}</Text>
               </LinearGradient>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={this.forgetpass.bind(this)} style={styles.text_auth} activeOpacity={1}>
-              <Text style={styles.text_auth}>{Strings.ST29.toUpperCase()}</Text>
+              <Text style={styles.text_auth}>{StringI18.t('ST29').toUpperCase()}</Text>
             </TouchableOpacity>
 
 

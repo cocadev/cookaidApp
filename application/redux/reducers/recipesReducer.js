@@ -14,7 +14,7 @@ import {
   ACTION_UPDATE_OFFSET,
   ACTION_UPDATE_RECIPE,
 } from "../actionTypes";
-import {getUniqueArray} from "../../utils/utils";
+import {getUniqueArray} from "../../utils/arrayUtils";
 
 
 const initialState = {

@@ -1,5 +1,6 @@
 import ConfigApp from "./ConfigApp";
 import CacheManager from "./CacheManager";
+import {getTargetLanguage, translatePromptStringArray, translateRecipe} from "./Translating";
 
 export function getRandomInt(min, max) {
   return Math.round(Math.random() * (max - min) + min);
@@ -29,6 +30,7 @@ export function getSpoonacularTypeOrDiet(categoryTitle) {
       case "paleo":
       case "primal":
       case "whole30":
+      case "vegetarian (lacto/ovo)":
         result.diet = categoryTitle;
         break;
       case "main course":
@@ -47,6 +49,9 @@ export function getSpoonacularTypeOrDiet(categoryTitle) {
       case "drink":
         result.type = categoryTitle;
         break;
+
+      default:
+        result.keyword = categoryTitle;
     }
   }
   if (!result.type && !result.diet) {
@@ -69,52 +74,85 @@ export function randomItemFromArray(array) {
   return value;
 }
 
-export function convertRecipesSpoonacularToCookAid(recipes, cuisine, diet = null, type = null) {
-  return recipes.map(item => {
-    if (!item) return item;
-    let newItem = {};
-    newItem.isSpoonacular = true;
-    newItem.id = item.id;
-    newItem.recipe_id = item.id ? item.id.toString() : '';
-    newItem.recipe_title = item.title;
-    newItem.recipe_image = `https://spoonacular.com/recipeImages/${item.id}-${'636x393'}.jpg`;
-    newItem.recipe_image_lower = `https://spoonacular.com/recipeImages/${item.id}-${'312x231'}.jpg`;
-    CacheManager.prefetch(newItem.recipe_image_lower)
-      .then(() => {
-        return CacheManager.prefetch(newItem.recipe_image);
-      })
+export function convertRecipesSpoonacularToCookAid(recipes, cuisine, diet = null, type = null, needTranslate = true) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const newRecipes = recipes.map(item => {
+        if (!item) return item;
+        let newItem = {};
+        newItem.isSpoonacular = true;
+        newItem.id = item.id;
+        newItem.recipe_id = item.id ? item.id.toString() : '';
+        newItem.recipe_title = item.title;
+        newItem.recipe_image = `https://spoonacular.com/recipeImages/${item.id}-${'636x393'}.jpg`;
+        newItem.recipe_image_lower = `https://spoonacular.com/recipeImages/${item.id}-${'312x231'}.jpg`;
+        CacheManager.prefetch(newItem.recipe_image_lower)
+          .then(() => {
+            return CacheManager.prefetch(newItem.recipe_image);
+          })
 
-    newItem.recipe_time = item.readyInMinutes;
-    newItem.recipe_cals = item && item.nutrition && item.nutrition[0] ? Math.round(item.nutrition[0].amount) : '';
-    if (item && item.nutrition && item.nutrition.nutrients) {
-      const filtedCal = item.nutrition.nutrients.filter(i => i.title && i.title.toLowerCase() === "calories");
-      if (filtedCal && filtedCal[0]) {
-        newItem.recipe_cals =  Math.round(filtedCal[0].amount);
-      }
-    }
+        newItem.recipe_time = item.readyInMinutes;
+        newItem.recipe_cals = item && item.nutrition && item.nutrition[0] ? Math.round(item.nutrition[0].amount) : '';
+        if (item && item.nutrition && item.nutrition.nutrients) {
+          const filtedCal = item.nutrition.nutrients.filter(i => i.title && i.title.toLowerCase() === "calories");
+          if (filtedCal && filtedCal[0]) {
+            newItem.recipe_cals = Math.round(filtedCal[0].amount);
+          }
+        }
 
-    newItem.recipe_servings = item.servings;
-    newItem.recipe_description = "";
-    newItem.recipe_video = "";
+        newItem.recipe_servings = item.servings;
+        newItem.recipe_description = "";
+        newItem.recipe_video = "";
 
-    if (item.missedIngredients) {
-      newItem.recipe_ingredients = item.missedIngredients.map(item => {
-        item.image = item.image.replace("100x100", "500x500");
-        return item;
+        if (item.missedIngredients) {
+          newItem.recipe_ingredients = item.missedIngredients.map(item => {
+            item.image = item.image.replace("100x100", "500x500");
+            return item;
+          });
+        }
+
+
+        newItem.recipe_directions = generateMethod(item);
+
+        newItem.recipe_notes = "";
+        newItem.recipe_featured = "no";
+        newItem.recipe_status = "Publish";
+        newItem.category_title = diet || type || randomItemFromArray(item.diets) || randomItemFromArray(item.dishTypes) || "";
+        newItem.chef_title = cuisine || randomItemFromArray(item.cuisines) || "";
+        newItem.creditsText = item.creditsText;
+        newItem.sourceUrl = item.sourceUrl;
+        return newItem;
       });
+
+      if (!needTranslate) {
+        return resolve(newRecipes)
+      }
+      const promises = newRecipes.map(item => {
+        return translateRecipe(item);
+      });
+      Promise.all(promises)
+        .then(results => {
+          return resolve(results);
+        })
+        .catch(err => {
+          console.log('translateRecipe error', err)
+          return resolve(newRecipes);
+        })
+      const targetLanguage = getTargetLanguage();
+      let arrayRecipeTitle = newRecipes.map(recipe => recipe['recipe_title']);
+      let translatedRecipeTitles = await translatePromptStringArray(arrayRecipeTitle, targetLanguage);
+      translatedRecipeTitles.map((item, index) => {
+        newRecipes[index] = Object.assign(newRecipes[index], {
+          recipe_title: item,
+          recipe_title_translated: targetLanguage
+        })
+      });
+      return resolve(newRecipes);
+    } catch (e) {
+      console.log('error convert', e);
+      return reject(e);
     }
 
-
-    newItem.recipe_directions = generateMethod(item);
-
-    newItem.recipe_notes = "";
-    newItem.recipe_featured = "no";
-    newItem.recipe_status = "Publish";
-    newItem.category_title = diet || type || randomItemFromArray(item.diets) || randomItemFromArray(item.dishTypes) || "";
-    newItem.chef_title = cuisine || randomItemFromArray(item.cuisines) || "";
-    newItem.creditsText = item.creditsText;
-    newItem.sourceUrl = item.sourceUrl;
-    return newItem;
   })
 }
 export async function preLoadRecipeImage(recipes) {
@@ -192,10 +230,22 @@ export function findDuplicateInArray(arg) {
   });
 }
 
-export function getUniqueArray(arg) {
-  const tempObject = {};
-  arg.map(item => {
-    tempObject[item.recipe_title] = item;
-  })
-  return Object.keys(tempObject).map(key => tempObject[key]);
+export function getArrayStringFromXML(xmlString) {
+  /*const response = '<ArrayOfstring xmlns="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">\n' +
+    '    <string>首 个 文字</string>\n' +
+    '    <string>2 个 文本</string>\n' +
+    '    <string>2 个 文本</string>\n' +
+    '    <string>2 个 文本</string>\n' +
+    '</ArrayOfstring>';*/
+
+  const re = /<string>(.*)<\/string>/gm;
+  const result = [];
+  let m;
+  do {
+    m = re.exec(xmlString);
+    if (m) {
+      result.push(m[1]);
+    }
+  } while (m);
+  return result;
 }

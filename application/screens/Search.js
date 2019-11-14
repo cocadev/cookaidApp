@@ -1,10 +1,19 @@
 import React, {Component} from 'react';
 import {NavigationActions, StackNavigator} from 'react-navigation';
-import {ActivityIndicator, Dimensions, Image, ScrollView, StatusBar, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  BackHandler,
+  Dimensions,
+  Image,
+  ScrollView,
+  StatusBar,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import {Body, Container, Icon, Input, Item, List, ListItem, Right, Text} from 'native-base';
 import Icono from 'react-native-vector-icons/Ionicons';
 import ConfigApp from '../utils/ConfigApp';
-import Strings from '../utils/Strings';
+import {StringI18} from '../utils/Strings';
 import {LinearGradient} from 'expo-linear-gradient';
 
 import {Col, Grid} from 'react-native-easy-grid';
@@ -86,6 +95,16 @@ class Search extends Component {
   componentDidMount() {
     // const {params} = this.props.navigation.state;
     // this.props.search(params.string);
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+  }
+
+  componentWillUnmount() {
+    this.backHandler.remove()
+  }
+
+  handleBackPress = () => {
+    this.props.navigation.popToTop();
+    return true;
   }
 
   onSearchChange = (text) => {
@@ -115,7 +134,7 @@ class Search extends Component {
       <ScrollView>
         {items.map((item, index) => {
           return (
-              <TouchableOpacity onPress={() => this.RecipeDetails(item)} activeOpacity={1} style={{marginBottom: 5,marginLeft:5,marginRight:5}}>
+              <TouchableOpacity key={item.id} onPress={() => this.RecipeDetails(item)} activeOpacity={1} style={{marginBottom: 5,marginLeft:5,marginRight:5}}>
                 <CacheImageBackground uri={item && item.isSpoonacular ? item.recipe_image : ConfigApp.URL + 'images/' + item.recipe_image}
                                       style={styles.background_card}>
                   <LinearGradient colors={['rgba(0,0,0,0.4)', 'rgba(0,0,0,0.6)']} style={styles.gradient_card}>
@@ -188,7 +207,7 @@ class Search extends Component {
                 </TouchableOpacity>
               </Col>
               <Col size={2} style={{alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{Strings.ST19}</Text>
+                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{StringI18.t('ST19')}</Text>
               </Col>
               <Col style={{alignItems: 'flex-end', alignContent: 'flex-end', justifyContent: 'flex-end'}}>
               </Col>
@@ -200,7 +219,7 @@ class Search extends Component {
 
               <Icono name='md-search' style={{fontSize: 20, marginTop: 4, color: '#333', marginLeft: 20}}/>
               <Input
-                placeholder={Strings.ST40}
+                placeholder={StringI18.t('ST40')}
                 onChangeText={this.onSearchChange}
                 placeholderTextColor="#a4a4a4"
                 style={{fontSize: 15, color: '#a4a4a4'}}
@@ -213,8 +232,8 @@ class Search extends Component {
           </View>
 
           <View style={{marginHorizontal: 12, marginTop: 10, marginBottom: 5}}>
-            {this.state.word == '' && this.state.string == null ? <Text style={{fontSize: 14}}>{Strings.ST108}</Text> :
-              <Text style={{fontSize: 14}}>{Strings.ST107} <Text style={{
+            {this.state.word == '' && this.state.string == null ? <Text style={{fontSize: 14}}>{StringI18.t('ST108')}</Text> :
+              <Text style={{fontSize: 14}}>{StringI18.t('ST107')} <Text style={{
                 fontWeight: 'bold',
                 fontSize: 14
               }}> {keyword == null ? this.state.word : keyword}</Text> </Text>}

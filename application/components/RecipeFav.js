@@ -3,9 +3,10 @@ import React, {Component} from 'react';
 import {NavigationActions, StackNavigator, withNavigation} from 'react-navigation';
 import {AsyncStorage, TouchableOpacity, Dimensions, View, Image, ScrollView, FlatList} from 'react-native';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import {Container, Body, Thumbnail, Text, List, Right, ListItem} from 'native-base';
+import {Container, Body, Thumbnail, Text, List, Right, ListItem, Toast} from 'native-base';
 import ConfigApp from '../utils/ConfigApp';
 import ListEmpty from './ListEmpty';
+import {StringI18} from "../utils/Strings";
 
 class RecipeFav extends React.Component {
 
@@ -24,6 +25,12 @@ class RecipeFav extends React.Component {
       })
 
       await AsyncStorage.setItem('recipes', JSON.stringify(recipesItems));
+      
+      Toast.show({
+        text: StringI18.t('Recipe removed from favourites'),
+        textStyle: { textAlign: 'center' },
+        position: 'bottom'
+      });
 
       this.setState({
         ...this.state,

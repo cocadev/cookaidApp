@@ -8,14 +8,15 @@ import {connect} from "react-redux";
 import {fetchCuisine} from "../redux/actions/cuisineActions";
 import {cachingCuisineImage, getRandomArray} from "../utils/utils";
 import CacheImage from "./CacheImage";
+import {StringI18} from "../utils/Strings";
 
 var styles = require('../../assets/files/Styles');
 var {height, width} = Dimensions.get('window');
 
 class ChefsHome extends React.PureComponent {
 
-  RecipesByChef = (chef_id, chef_title) => {
-    this.props.navigation.navigate('RecipesByChefScreen', {IdChef: chef_id, TitleChef: chef_title});
+  RecipesByChef = (chef_id, chef_title, chef_title_original) => {
+    this.props.navigation.navigate('RecipesByChefScreen', {IdChef: chef_id, TitleChef: chef_title, Cuisine: chef_title_original});
   }
 
   constructor(props) {
@@ -52,13 +53,13 @@ class ChefsHome extends React.PureComponent {
 
     return (
 
-      <View style={{margin: 5}}>
+      <View style={{margin: 5, minHeight: 200}}>
         <FlatList
           data={this.state.cuisines}
           refreshing="false"
           numColumns={3}
           renderItem={({item}) =>
-            <TouchableOpacity onPress={this.RecipesByChef.bind(this, item.chef_id, item.chef_title)} activeOpacity={1}
+            <TouchableOpacity onPress={this.RecipesByChef.bind(this, item.chef_id, item.chef_title, item.chef_title_original || item.chef_title)} activeOpacity={1}
                               style={{
                                 flex: 1,
                                 marginHorizontal: 5,
@@ -71,7 +72,7 @@ class ChefsHome extends React.PureComponent {
                 style={{height: 80, width: 80, marginBottom: 10, borderRadius: 80 / 2, backgroundColor: 'rgba(0,0,0,0.1)'}}
                 imageStyle={{borderRadius: 80 / 2}}
               />
-              <Text numberOfLines={1} style={{color: '#9e9e9e', fontSize: 11, marginBottom: 5, textTransform: 'capitalize'}}>{item.chef_title}</Text>
+              <Text numberOfLines={1} style={{color: '#9e9e9e', fontSize: 11, marginBottom: 5, textTransform: 'capitalize'}}>{StringI18.t(item.chef_title)}</Text>
             </TouchableOpacity>
           }
           keyExtractor={(item, index) => index.toString()}

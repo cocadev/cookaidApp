@@ -4,6 +4,7 @@ import {ImageBackground, Dimensions, View, ActivityIndicator, TouchableOpacity, 
 import {Container, Text} from 'native-base';
 import Carousel from 'react-native-snap-carousel';
 import ConfigApp from '../utils/ConfigApp';
+import {StringI18} from "../utils/Strings";
 
 var {height, width} = Dimensions.get('window');
 
@@ -66,7 +67,7 @@ class RecipesHome extends React.PureComponent {
           <Text numberOfLines={1}
                 style={{color: '#000', fontSize: 14, fontWeight: 'bold', marginBottom: 5}}>{item.recipe_title}</Text>
           <View style={{flexDirection: 'column', marginBottom: 5}}>
-            <Text style={{fontSize: 13, color: '#a4a4a4', marginBottom: 5}}>{item.category_title || item.chef_title}</Text>
+            <Text style={{fontSize: 13, color: '#a4a4a4', marginBottom: 5}}>{StringI18.translateIfNotExist(item.category_title) || StringI18.translateIfNotExist(item.chef_title)}</Text>
           </View>
 
         </View>
@@ -110,7 +111,7 @@ class RecipesHome extends React.PureComponent {
                 marginBottom: 5
               }}>{item.recipe_title}</Text>
               <View style={{flexDirection: 'column', marginBottom: 5}}>
-                <Text style={{fontSize: 13, color: '#a4a4a4', marginBottom: 5, textTransform: 'capitalize'}}>{item.category_title || item.chef_title}</Text>
+                <Text style={{fontSize: 13, color: '#a4a4a4', marginBottom: 5, textTransform: 'capitalize'}}>{StringI18.translateIfNotExist(item.category_title) || StringI18.translateIfNotExist(item.chef_title)}</Text>
               </View>
 
             </View>

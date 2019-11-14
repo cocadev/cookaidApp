@@ -3,6 +3,7 @@ import {NavigationActions, StackNavigator} from 'react-navigation';
 import AppPreLoader from '../components/AppPreLoader';
 import {
   ActivityIndicator,
+  BackHandler,
   Dimensions,
   FlatList,
   Image,
@@ -29,6 +30,7 @@ import {connect} from "react-redux";
 import {isCloseToBottom} from "../utils/utils";
 import CategoryCuisineComponent from "../components/CategoryCuisineComponent";
 import CacheImageBackground from "../components/CacheImageBackground";
+import {StringI18} from "../utils/Strings";
 
 
 var styles = require('../../assets/files/Styles');
@@ -54,7 +56,17 @@ class RecipesByCategory extends Component {
     if (this.props.navigation && this.props.navigation.state) {
       this.props.getRecipesByCategory(this.props.navigation.state.params)
     }
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+  }
 
+  componentWillUnmount() {
+    this.backHandler.remove()
+  }
+
+  handleBackPress = () => {
+    this.props.clearRecipesByCategory();
+    this.props.navigation.popToTop();
+    return true;
   }
 
   RecipeDetails(item) {
@@ -66,6 +78,10 @@ class RecipesByCategory extends Component {
   }
 
   renderItem = ({item}) => {
+    const {params} = this.props.navigation &&  this.props.navigation.state ? this.props.navigation.state : {};
+    if (params) {
+      item.category_title = params.TitleCategory;
+    }
     return (
       <TouchableOpacity onPress={() => this.RecipeDetails(item)} activeOpacity={1} style={{marginBottom: 5}}>
         <CacheImageBackground
@@ -125,12 +141,12 @@ class RecipesByCategory extends Component {
 
             <Grid>
               <Col style={{alignItems: 'flex-start', alignContent: 'flex-start', justifyContent: 'flex-start'}}>
-                <TouchableOpacity onPress={() => this.props.navigation.goBack()} activeOpacity={1}>
+                <TouchableOpacity onPress={() => this.handleBackPress()} activeOpacity={1}>
                   <Icono name="md-arrow-back" style={{fontSize: 27, color: '#000'}}/>
                 </TouchableOpacity>
               </Col>
               <Col size={2} style={{alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{params.TitleCategory}</Text>
+                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold', textTransform: 'capitalize'}}>{StringI18.t(params.TitleCategory)}</Text>
               </Col>
               <Col style={{alignItems: 'flex-end', alignContent: 'flex-end', justifyContent: 'flex-end'}}>
                 <TouchableOpacity onPress={this.search.bind(this)} activeOpacity={1}>

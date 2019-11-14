@@ -6,7 +6,7 @@ const Form = t.form.Form;
 import {View, TouchableOpacity} from "react-native";
 import {Button, Text} from 'native-base';
 import * as firebase from 'firebase';
-import Strings from '../utils/Strings';
+import {StringI18} from '../utils/Strings';
 
 import {LinearGradient} from 'expo-linear-gradient';
 import ColorsApp from '../utils/ColorsApp';
@@ -88,7 +88,7 @@ export default class ItemForm extends Component {
         <TouchableOpacity onPress={this.addComment.bind(this)} activeOpacity={1}>
           <LinearGradient colors={[ColorsApp.SECOND, ColorsApp.PRIMARY]} start={[0, 0]} end={[1, 0]}
                           style={styles.postCommentButton}>
-            <Text style={styles.postCommentText}>{Strings.ST61.toUpperCase()}</Text>
+            <Text style={styles.postCommentText}>{StringI18.t('ST61').toUpperCase()}</Text>
           </LinearGradient>
         </TouchableOpacity>
 

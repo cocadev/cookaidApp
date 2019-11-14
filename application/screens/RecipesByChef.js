@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {NavigationActions, StackNavigator} from 'react-navigation';
 import {
-  ActivityIndicator,
+  ActivityIndicator, BackHandler,
   Dimensions,
   FlatList,
   Image,
@@ -24,6 +24,7 @@ import {clearRecipesByCuisine, searchNextPageCuisine, searchRecipesByCuisine} fr
 import {isCloseToBottom} from "../utils/utils";
 import CategoryCuisineComponent from "../components/CategoryCuisineComponent";
 import CacheImageBackground from "../components/CacheImageBackground";
+import {StringI18} from "../utils/Strings";
 
 
 var styles = require('../../assets/files/Styles');
@@ -44,9 +45,22 @@ class RecipesByChef extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.clearRecipesByCuisine();
     this.props.searchRecipesByCuisine(this.props.navigation.state.params);
+  }
+
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+  }
+
+  componentWillUnmount() {
+    this.backHandler.remove()
+  }
+
+  handleBackPress = () => {
+    this.props.navigation.popToTop();
+    return true;
   }
 
   RecipeDetails(item) {
@@ -120,7 +134,7 @@ class RecipesByChef extends Component {
                 </TouchableOpacity>
               </Col>
               <Col size={2} style={{alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{params.TitleChef}</Text>
+                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{StringI18.t(params.TitleChef)}</Text>
               </Col>
               <Col style={{alignItems: 'flex-end', alignContent: 'flex-end', justifyContent: 'flex-end'}}>
                 <TouchableOpacity onPress={this.search.bind(this)} activeOpacity={1}>

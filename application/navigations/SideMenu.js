@@ -16,7 +16,7 @@ import {
   Right,
   Switch
 } from 'native-base';
-import Strings from '../utils/Strings';
+import {StringI18} from '../utils/Strings';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
 
@@ -52,7 +52,7 @@ class SideMenu extends Component {
               <Icon name="tag" style={styles.iconSidemenu}/>
             </Left>
             <Body style={{borderBottomWidth: 0}}>
-            <Text style={styles.text_menu}>{Strings.ST2.toUpperCase()}</Text>
+            <Text style={styles.text_menu}>{StringI18.t('ST2').toUpperCase()}</Text>
             </Body>
             <Right style={{borderBottomWidth: 0}}>
               <Icon name="arrow-right" style={styles.icon_menu}/>
@@ -64,7 +64,7 @@ class SideMenu extends Component {
               <Icon name="flag" style={styles.iconSidemenu}/>
             </Left>
             <Body style={{borderBottomWidth: 0}}>
-            <Text style={styles.text_menu}>{Strings.ST3.toUpperCase()}</Text>
+            <Text style={styles.text_menu}>{StringI18.t('ST3').toUpperCase()}</Text>
             </Body>
             <Right style={{borderBottomWidth: 0}}>
               <Icon name="arrow-right" style={styles.icon_menu}/>
@@ -76,7 +76,7 @@ class SideMenu extends Component {
               <Icon name="magnifier" style={styles.iconSidemenu}/>
             </Left>
             <Body style={{borderBottomWidth: 0}}>
-            <Text style={styles.text_menu}>{Strings.ST4.toUpperCase()}</Text>
+            <Text style={styles.text_menu}>{StringI18.t('ST4').toUpperCase()}</Text>
             </Body>
             <Right style={{borderBottomWidth: 0}}>
               <Icon name="arrow-right" style={styles.icon_menu}/>
@@ -88,7 +88,7 @@ class SideMenu extends Component {
               <Icon name="heart" style={styles.iconSidemenu}/>
             </Left>
             <Body style={{borderBottomWidth: 0}}>
-            <Text style={styles.text_menu}>{Strings.ST6.toUpperCase()}</Text>
+            <Text style={styles.text_menu}>{StringI18.t('ST6').toUpperCase()}</Text>
             </Body>
             <Right style={{borderBottomWidth: 0}}>
               <Icon name="arrow-right" style={styles.icon_menu}/>
@@ -100,7 +100,7 @@ class SideMenu extends Component {
               <Icon name="info" style={styles.iconSidemenu}/>
             </Left>
             <Body style={{borderBottomWidth: 0}}>
-            <Text style={styles.text_menu}>ABOUT</Text>
+            <Text style={styles.text_menu}>{StringI18.t("about")}</Text>
             </Body>
             <Right style={{borderBottomWidth: 0}}>
               <Icon name="arrow-right" style={styles.icon_menu}/>

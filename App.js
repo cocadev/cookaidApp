@@ -19,28 +19,9 @@ import Constants from 'expo-constants';
 import NotificationPopup from 'react-native-push-notification-popup';
 import Strings from "./application/utils/Strings";
 import CustomPopupNotification from "./application/components/CustomPopupNotification";
-// import * as Amplitude from 'expo-analytics-amplitude';
-
-// Amplitude.initialize("480a0845a87dbe75769c39caa0a09aac")
-// Amplitude.logEvent(eventName)
-
-// import * as firebase from 'firebase';
-
-//var firebaseConfig = {
- //   apiKey: "AIzaSyDs1F7MQFhS4Pho5JesTbpNlfvFCklH5z8",
- //   authDomain: "cookaid-ltd.firebaseapp.com",
- //   databaseUrl: "https://cookaid-ltd.firebaseio.com",
- //   projectId: "cookaid-ltd",
- //   storageBucket: "cookaid-ltd.appspot.com",
- //   messagingSenderId: "132759157675",
- //   appId: "1:132759157675:ios:d4dc244509b644eff370ee",
- //   measurementId: "G-QFB73SNHM7"
-//  };
-
-// firebase.initializeApp(firebaseConfig);
 
 Sentry.init({
-  dsn: 'https://916c23c6a44d4379808b60bcaa79fced@sentry.io/1767347',
+  dsn: 'PRIMIARY_KEY',
   enableInExpoDevelopment: false,
   debug: true
 });

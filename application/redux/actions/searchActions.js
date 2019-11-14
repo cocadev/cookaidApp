@@ -168,9 +168,9 @@ function searchFromSpoonacular(keyword, offset, numberPerPage, cuisine = null, d
         number: numberPerPage,
         apiKey: ConfigApp.SPOONACULAR_API_KEY,
       }
-    }).then((response) => {
+    }).then(async (response) => {
       if (response && response.data && response.data.results) {
-        const recipes = convertRecipesSpoonacularToCookAid(response.data.results, cuisine, diet, type);
+        const recipes = await convertRecipesSpoonacularToCookAid(response.data.results, cuisine, diet, type);
         const offset = response.data.offset;
         const number = response.data.number;
         const totalResults = response.data.totalResults;
@@ -281,8 +281,8 @@ export function searchRecipesByCuisine(cuisine, isJustSpoonacular = false, offse
         return results;
       });
     }
-    const isSAPISupported = supportCuisineSAPI.indexOf(cuisine.TitleChef ? cuisine.TitleChef.toLowerCase() : cuisine.TitleChef) >= 0;
-    const searchSpoonacular = dispatch(searchFromSpoonacular(!isSAPISupported ? cuisine.TitleChef : "", offset, numberPerPage, isSAPISupported ? cuisine.TitleChef : null));
+    const isSAPISupported = supportCuisineSAPI.indexOf(cuisine.Cuisine ? cuisine.Cuisine.toLowerCase() : cuisine.Cuisine) >= 0;
+    const searchSpoonacular = dispatch(searchFromSpoonacular(!isSAPISupported ? cuisine.Cuisine : "", offset, numberPerPage, isSAPISupported ? cuisine.TitleChef : null));
     promises.push(searchSpoonacular);
     searchSpoonacular.then(results => {
       dispatch({
@@ -392,7 +392,7 @@ export function getRecipesByCategory(category, isJustSpoonacular = false, offset
         return results;
       });
     }
-    const {diet, type, keyword} = getSpoonacularTypeOrDiet(category.TitleCategory);
+    const {diet, type, keyword} = getSpoonacularTypeOrDiet(category.Category);
     const searchSpoonacular = dispatch(searchFromSpoonacular(keyword, offset, numberPerPage, null, diet, type));
     promises.push(searchSpoonacular);
     searchSpoonacular.then(results => {

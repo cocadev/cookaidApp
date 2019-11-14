@@ -9,6 +9,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 import {Container, Text} from 'native-base';
 import ConfigApp from '../utils/ConfigApp';
 
+import {StringI18} from '../utils/Strings';
 import Strings from '../utils/Strings';
 
 
@@ -86,7 +87,7 @@ class AboutUs extends Component {
                 </TouchableOpacity>
               </Col>
               <Col size={2} style={{alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{Strings.ST9}</Text>
+                <Text style={{fontSize: 16, color: '#000', fontWeight: 'bold'}}>{StringI18.t('ST9')}</Text>
               </Col>
               <Col style={{alignItems: 'flex-end', alignContent: 'flex-end', justifyContent: 'flex-end'}}>
               </Col>
@@ -109,24 +110,24 @@ class AboutUs extends Component {
 
             />*/}
             <Text style={styleAboutUs.textStyle}>
-              {Strings.AboutUs1}
+              {StringI18.t('AboutUs1')}
             </Text>
             <Text style={[styleAboutUs.textStyle, styleAboutUs.textMarginTop]}>
-              {Strings.AboutUs2}
+              {StringI18.t('AboutUs2')}
             </Text>
             <TouchableOpacity onPress={() => this.onLinkPress(Strings.AboutUsLinkSupport)}>
               <Text style={[styleAboutUs.textStyle, styleAboutUs.linkStyle, styleAboutUs.textMarginTop]}>
-                {Strings.AboutUsLinkSupport}
+                {StringI18.t('AboutUsLinkSupport')}
               </Text>
             </TouchableOpacity>
 
             <Text style={[styleAboutUs.textStyle, styleAboutUs.textMarginTop]}>
-              {Strings.AboutUs3}
+              {StringI18.t('AboutUs3')}
             </Text>
 
             <TouchableOpacity onPress={() => this.onLinkPress(Strings.AboutUsLinkPrivacy)}>
               <Text style={[styleAboutUs.textStyle, styleAboutUs.linkStyle, styleAboutUs.textMarginTop]}>
-                {Strings.AboutUsLinkPrivacy}
+                {StringI18.t('AboutUsLinkPrivacy')}
               </Text>
             </TouchableOpacity>
           </View>
