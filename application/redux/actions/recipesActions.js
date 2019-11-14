@@ -7,7 +7,7 @@ import {
   ACTION_START_FETCHING_RANDOM,
   ACTION_UPDATE_RECIPE
 } from "../actionTypes";
-import {convertRecipesSpoonacularToCookAid} from "../../utils/utils";
+import { convertRecipesSpoonacularToCookAid } from "../../utils/utils";
 import {
   getTargetLanguage,
   translatePromptStringArray,
@@ -34,9 +34,9 @@ export function getRecipeNutrition(recipe) {
             customNutrition: response.data,
           }
         })
-        return resolve(Object.assign({},{customNutrition: response.data}));
+        return resolve(Object.assign({}, { customNutrition: response.data }));
       }
-      return reject({message: "invalid response"});
+      return reject({ message: "invalid response" });
     }).catch((error) => {
       return reject(error);
     })
@@ -60,7 +60,7 @@ export function getRecipeInformation(recipeId) {
         if (item && item.nutrition && item.nutrition.nutrients) {
           const filtedCal = item.nutrition.nutrients.filter(i => i.title && i.title.toLowerCase() === "calories");
           if (filtedCal && filtedCal[0]) {
-            item.recipe_cals =  Math.round(filtedCal[0].amount);
+            item.recipe_cals = Math.round(filtedCal[0].amount);
           }
         }
         translateRecipe(item)
@@ -78,16 +78,16 @@ export function getRecipeInformation(recipeId) {
           .catch(err => {
             return resolve(response.data)
           })
-       /* dispatch({
-          type: ACTION_UPDATE_RECIPE,
-          recipe: {
-            id: recipeId,
-            ... item,
-          }
-        });*/
-       return;
+        /* dispatch({
+           type: ACTION_UPDATE_RECIPE,
+           recipe: {
+             id: recipeId,
+             ... item,
+           }
+         });*/
+        return;
       }
-      return reject({message: "invalid response"});
+      return reject({ message: "invalid response" });
     }).catch((error) => {
       return reject(error);
     })
@@ -112,7 +112,7 @@ export function getBulkRecipeInformation(recipes) {
             if (detailInfo && detailInfo.nutrition && detailInfo.nutrition.nutrients) {
               const filtedCal = detailInfo.nutrition.nutrients.filter(i => i.title && i.title.toLowerCase() === "calories");
               if (filtedCal && filtedCal[0]) {
-                recipe.recipe_cals =  Math.round(filtedCal[0].amount);
+                recipe.recipe_cals = Math.round(filtedCal[0].amount);
               }
             }
             recipe = Object.assign(recipe, detailInfo);
@@ -120,7 +120,7 @@ export function getBulkRecipeInformation(recipes) {
         })
         return resolve(recipes);
       }
-      return reject({message: "invalid response"});
+      return reject({ message: "invalid response" });
     }).catch((error) => {
       return reject(error);
     })
@@ -166,7 +166,7 @@ export function fetchRandomRecipes(number) {
         try {
           // const timeStart = Date.now();
           // console.log('timeStart', Date.now());
-          let recipes = await convertRecipesSpoonacularToCookAid(response.data.recipes, null,null,null, false);
+          let recipes = await convertRecipesSpoonacularToCookAid(response.data.recipes, null, null, null, false);
           // console.log('timeEnd1', Date.now() - timeStart);
           recipes = await getBulkRecipeInformation(recipes);
 
@@ -186,7 +186,7 @@ export function fetchRandomRecipes(number) {
           let arrayRecipeTitle = recipes.map(recipe => recipe['recipe_title']);
           let translatedRecipeTitles = await translatePromptStringArray(arrayRecipeTitle, targetLanguage);
           translatedRecipeTitles.map((item, index) => {
-            emptyTitle[index] = Object.assign(emptyTitle[index], {recipe_title: item, recipe_title_translated: targetLanguage})
+            emptyTitle[index] = Object.assign(emptyTitle[index], { recipe_title: item, recipe_title_translated: targetLanguage })
           });
 
           dispatch({
@@ -199,7 +199,7 @@ export function fetchRandomRecipes(number) {
         }
         return resolve(response.data);
       }
-      return reject({message: "invalid response"});
+      return reject({ message: "invalid response" });
     }).catch((error) => {
       dispatch(finishRandomFetching(false));
       return reject(error);

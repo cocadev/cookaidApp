@@ -6,8 +6,7 @@ import {
 } from "../actionTypes";
 import ConfigApp from "../../utils/ConfigApp";
 import axios from "axios";
-import {cachingCategoriesImage, cachingCuisineImage} from "../../utils/utils";
-import {translating} from "../../utils/Translating";
+import { cachingCategoriesImage, cachingCuisineImage } from "../../utils/utils";
 
 export function fetchCuisine() {
   return dispatch => new Promise((resolve, reject) => {
@@ -18,18 +17,6 @@ export function fetchCuisine() {
       .then((response) => {
         if (response && response.data) {
           const cuisines = response.data;
-          /*translating(cuisines, 'chef_title')
-            .then(res => {
-              dispatch({
-                type: ACTION_CUISINE_FETCH_SUCCESS,
-                cuisines: res,
-              })
-              cachingCuisineImage(res);
-              return resolve();
-            })
-            .catch(err => {
-              console.log('translatingError', err);
-            });*/
           dispatch({
             type: ACTION_CUISINE_FETCH_SUCCESS,
             cuisines,
@@ -37,12 +24,12 @@ export function fetchCuisine() {
           cachingCuisineImage(cuisines);
           return resolve();
         }
-        return reject({message: "invalid response"});
+        return reject({ message: "invalid response" });
       }).catch((error) => {
-      return dispatch({
-        type: ACTION_CUISINE_FETCH_ERROR,
-        error,
+        return dispatch({
+          type: ACTION_CUISINE_FETCH_ERROR,
+          error,
+        })
       })
-    })
   })
 }

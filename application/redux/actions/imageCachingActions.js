@@ -20,7 +20,7 @@ export function addCachingQueue(uri, path) {
 
 export function startDownload(uri, path) {
   return dispatch => {
-     dispatch({
+    dispatch({
       type: ACTION_IMAGE_CACHING_DOWNLOAD_START,
       uri,
       path,
@@ -52,7 +52,7 @@ export function downloadFailed(uri, path) {
 
 export function process() {
   return (dispatch, getState) => {
-    const {caching} = getState();
+    const { caching } = getState();
     const queueTask = caching.queueTask;
     const processingTask = caching.processingTask;
     // console.log('queueTask', queueTask);

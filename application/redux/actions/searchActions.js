@@ -18,7 +18,7 @@ import {
 } from "../actionTypes";
 import axios from "axios";
 import ConfigApp from "../../utils/ConfigApp";
-import {convertRecipesSpoonacularToCookAid, getSpoonacularTypeOrDiet} from "../../utils/utils";
+import { convertRecipesSpoonacularToCookAid, getSpoonacularTypeOrDiet } from "../../utils/utils";
 
 const supportCuisineSAPI = [
   "african",
@@ -125,17 +125,17 @@ export function searchNextPage() {
     const numberPerPage = state.recipes.numberPerPage;
     const keyword = state.recipes.keyword;
     const totalResults = state.recipes.totalResults;
-    offset +=numberPerPage;
+    offset += numberPerPage;
     if (offset > totalResults) {
       return;
     }
-    dispatch(search(keyword,true, offset, numberPerPage));
+    dispatch(search(keyword, true, offset, numberPerPage));
   }
 }
 function searchFromCookAid(keyword, offset, numberPerPage) {
   return dispatch => new Promise((resolve, reject) => {
     if (!keyword) {
-      reject({message: "empty keyword"})
+      reject({ message: "empty keyword" })
     }
     axios.get(`${ConfigApp.URL}json/data_search.php`, {
       params: {
@@ -143,7 +143,7 @@ function searchFromCookAid(keyword, offset, numberPerPage) {
       }
     }).then((response) => {
       if (response && response.data == 'false') {
-        return reject({message: "invalid response"});
+        return reject({ message: "invalid response" });
       }
       return resolve(response.data);
     }).catch((error) => {
@@ -177,7 +177,7 @@ function searchFromSpoonacular(keyword, offset, numberPerPage, cuisine = null, d
         dispatch(updateOffset(offset, numberPerPage, totalResults));
         return resolve(recipes);
       }
-      return reject({message: "invalid response"});
+      return reject({ message: "invalid response" });
     }).catch((error) => {
       return reject(error);
     })
@@ -323,7 +323,7 @@ export function getRecipesByCuisineCookAid(cuisineId) {
       }
     }).then((response) => {
       if (response && response.data == 'false') {
-        return reject({message: "invalid response"});
+        return reject({ message: "invalid response" });
       }
       return resolve(response.data);
     }).catch((error) => {
@@ -347,11 +347,11 @@ export function searchNextPageCuisine(cuisine) {
     const numberPerPage = state.recipes.numberPerPage;
     const keyword = state.recipes.keyword;
     const totalResults = state.recipes.totalResults;
-    offset +=numberPerPage;
+    offset += numberPerPage;
     if (offset > totalResults) {
       return;
     }
-    dispatch(searchRecipesByCuisine(cuisine,true, offset, numberPerPage));
+    dispatch(searchRecipesByCuisine(cuisine, true, offset, numberPerPage));
   }
 }
 
@@ -366,7 +366,7 @@ export function getRecipesByCategoryCookAid(category) {
       }
     }).then((response) => {
       if (response && response.data == 'false') {
-        return reject({message: "invalid response"});
+        return reject({ message: "invalid response" });
       }
       return resolve(response.data);
     }).catch((error) => {
@@ -392,7 +392,7 @@ export function getRecipesByCategory(category, isJustSpoonacular = false, offset
         return results;
       });
     }
-    const {diet, type, keyword} = getSpoonacularTypeOrDiet(category.Category);
+    const { diet, type, keyword } = getSpoonacularTypeOrDiet(category.Category);
     const searchSpoonacular = dispatch(searchFromSpoonacular(keyword, offset, numberPerPage, null, diet, type));
     promises.push(searchSpoonacular);
     searchSpoonacular.then(results => {
@@ -439,10 +439,10 @@ export function searchNextPageRecipesCategory(category) {
     let offset = state.recipes.offset;
     const numberPerPage = state.recipes.numberPerPage;
     const totalResults = state.recipes.totalResults;
-    offset +=numberPerPage;
+    offset += numberPerPage;
     if (offset > totalResults) {
       return;
     }
-    dispatch(getRecipesByCategory(category,true, offset, numberPerPage));
+    dispatch(getRecipesByCategory(category, true, offset, numberPerPage));
   }
 }
