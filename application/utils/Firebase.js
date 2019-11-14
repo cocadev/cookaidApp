@@ -1,5 +1,3 @@
-//////////////////// FIREBASE
-
 export default firebaseConfig = {
   apiKey: "",
   authDomain: "",

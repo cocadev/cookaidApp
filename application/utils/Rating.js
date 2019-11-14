@@ -1,16 +1,12 @@
 import React from 'react';
-import {View, Slider, Text} from "react-native";
+import {View, Text} from "react-native";
 import StarRating from 'react-native-star-rating';
-
-var styles = require('../../assets/files/Styles');
 
 export default sliderTemplate = (locals) => {
   const help = (
     <Text style={{marginBottom: 8}}>{locals.help}</Text>
   );
-
   return (
-
     <View>
       <StarRating
         ref="input"

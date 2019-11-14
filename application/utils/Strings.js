@@ -1,6 +1,5 @@
-import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
-import {getTargetLanguage, translateObject, translatePromt} from "./Translating";
+import {getTargetLanguage, translatePromt} from "./Translating";
 import en from "../languages/en.json";
 import * as languages from "../languages/";
 const Strings = en;
@@ -8,14 +7,12 @@ const Strings = en;
 i18n.fallbacks = true;
 
 export async function loadLang() {
-  // const result = await translateObject(Strings);
   i18n.locale = getTargetLanguage();
   console.log('targetLanguage', getTargetLanguage());
   const translations = {
     en: Strings,
     ...languages.default,
   };
-  // Object.assign(translations, {[getTargetLanguage()]: result});
   i18n.translations = translations;
   return i18n;
 }
