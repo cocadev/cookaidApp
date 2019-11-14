@@ -1,25 +1,25 @@
-import React from 'react' ;
+import React from 'react';
 import { View, Image, Platform } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import shorthash from 'shorthash';
-import {addCachingQueue} from "../redux/actions/imageCachingActions";
-import {bindActionCreators} from "redux";
-import {fetchCuisine} from "../redux/actions/cuisineActions";
-import {withNavigation} from "react-navigation";
-import {connect} from "react-redux";
+import { addCachingQueue } from "../redux/actions/imageCachingActions";
+import { bindActionCreators } from "redux";
+import { fetchCuisine } from "../redux/actions/cuisineActions";
+import { withNavigation } from "react-navigation";
+import { connect } from "react-redux";
 
 class CacheImage extends React.Component {
 
-  state = { source:null }
+  state = { source: null }
 
-  loadFile = ( path ) => {
+  loadFile = (path) => {
     if (!this.mounted) {
       return;
     }
-    this.setState({ source:{uri:path}}) ;
+    this.setState({ source: { uri: path } });
   }
 
-  downloadFile = (uri,path) => {
+  downloadFile = (uri, path) => {
     this.props.addCachingQueue(uri, path)
   }
 
@@ -36,28 +36,28 @@ class CacheImage extends React.Component {
     this.mounted = false;
   }
 
-  componentDidMount(){
-    const { uri } = this.props ;
+  componentDidMount() {
+    const { uri } = this.props;
     this.mounted = true;
     const name = shorthash.unique(uri);
     const extension = (Platform.OS === 'android') ? 'file://' : '';
     const match = uri.match(/\.[0-9a-z]+$/i);
     const fileExtension = match ? match[0] || '.png' : '.png';
-    const path =`${extension}${FileSystem.cacheDirectory}/${name}${fileExtension}`;
+    const path = `${extension}${FileSystem.cacheDirectory}/${name}${fileExtension}`;
 
     FileSystem.getInfoAsync(path)
       .then(({ exists, isDirectory }) => {
-        if(exists) {
+        if (exists) {
           // console.log('prefetch', `${uri} cached`);
-          this.loadFile(path) ;
+          this.loadFile(path);
         } else {
-          this.downloadFile(uri,path) ;
+          this.downloadFile(uri, path);
         }
       })
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <Image style={this.props.style} source={this.state.source} />
     );
   }
