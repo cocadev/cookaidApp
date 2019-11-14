@@ -1,19 +1,17 @@
 import React from 'react';
-import {Asset} from 'expo-asset'
+import { Asset } from 'expo-asset'
 import * as Font from 'expo-font';
-import {Root} from "native-base";
-import {AppLoading, Notifications} from 'expo'
-import {Platform, StatusBar} from "react-native";
+import { Root } from "native-base";
+import { AppLoading, Notifications } from 'expo'
+import { Platform, StatusBar } from "react-native";
 import AppPreLoader from "./application/components/AppPreLoader";
-
 import LoggedNavigation from './application/navigations/Logged';
 import OfflineBar from "./application/components/OfflineBar";
-// import ColorsApp from './application/utils/ColorsApp';
-import {Provider} from 'react-redux';
-import {getStore} from "./application/redux";
-import {fetchCategory} from "./application/redux/actions/categoryActions";
-import {fetchCuisine} from "./application/redux/actions/cuisineActions";
-import {fetchRandomRecipes} from "./application/redux/actions/recipesActions";
+import { Provider } from 'react-redux';
+import { getStore } from "./application/redux";
+import { fetchCategory } from "./application/redux/actions/categoryActions";
+import { fetchCuisine } from "./application/redux/actions/cuisineActions";
+import { fetchRandomRecipes } from "./application/redux/actions/recipesActions";
 import * as Sentry from 'sentry-expo';
 import Constants from 'expo-constants';
 import NotificationPopup from 'react-native-push-notification-popup';
@@ -27,8 +25,6 @@ Sentry.init({
 });
 
 Sentry.setRelease(Constants.manifest.revisionId);
-
-
 
 console.disableYellowBox = true;
 
@@ -75,7 +71,6 @@ export default class App extends React.Component {
     ]);
     store.dispatch(fetchCategory());
     store.dispatch(fetchCuisine());
-    // store.dispatch(getRandomSpoonacularRecipes(ConfigApp.HOME_MAX_RANDOM_RECIPES));
     store.dispatch(fetchRandomRecipes(6));
     await Promise.all([...imageAssets]);
   }
@@ -84,14 +79,6 @@ export default class App extends React.Component {
 
     await Font.loadAsync({
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
-      // 'simple-line-icons': require('@expo/vector-icons/SimpleLineIcons.ttf'),
-      // SimpleLineIcons: require('@expo/vector-icons/SimpleLineIcons.ttf'),
-      // Entypo: require('@expo/vector-icons/Entypo.ttf'),
-      // Ionicons: require('@expo/vector-icons/Ionicons.ttf'),
-      // 'Material Icons': require('@expo/vector-icons/MaterialIcons.ttf'),
-      // 'MaterialIcons': require('@expo/vector-icons/MaterialIcons.ttf'),
-
-
     });
 
     if (Platform.OS === 'android') {
@@ -104,30 +91,13 @@ export default class App extends React.Component {
       });
     }
 
-    /*this.notificationListener = Notifications.addListener(notification => {
-      // console.log('Notifications', notification);
-      if (notification && notification.data && this.popup) {
-        const data = notification.data;
-        this.popup.show({
-          onPress: () => this.dimissNotification({title: data.title, body: data.body}),
-          appIconSource: require('./assets/icon-android.png'),
-          appTitle: Strings.AppName,
-          timeText: 'Now',
-          title: data.title,
-          body: data.body,
-          slideOutTime: data.slideOutTime,
-        });
-        this.state.notifications.push(notification)
-      }
-    })*/
-
     this.setState({
       loaded: true
     });
 
   }
 
-  dimissNotification = ({title, body}) => {
+  dimissNotification = ({ title, body }) => {
     const filted = this.state.notifications.filter(item => {
       return !!(item && item.data && item.data.title == title && item.data.body == body);
     })
@@ -145,9 +115,7 @@ export default class App extends React.Component {
   }
 
   componentWillUnmount() {
-    /*if (this.notificationListener) {
-      this.notificationListener();
-    }*/
+
   }
 
   renderCustomPopup = ({ appIconSource, appTitle, timeText, title, body }) => (
@@ -157,7 +125,7 @@ export default class App extends React.Component {
       timeText={timeText}
       title={title}
       body={body}
-      onDismiss={() => this.dimissNotification({title, body})}
+      onDismiss={() => this.dimissNotification({ title, body })}
     />
   );
 
@@ -167,17 +135,17 @@ export default class App extends React.Component {
       return (
         <AppLoading
           startAsync={this._loadAssetsAsync}
-          onFinish={() => this.setState({isReady: true})}
+          onFinish={() => this.setState({ isReady: true })}
           onError={console.warn}
         />
       );
     }
 
-    const {loaded, isReady} = this.state;
+    const { loaded, isReady } = this.state;
 
     if (!loaded) {
       return (
-        <AppPreLoader/>
+        <AppPreLoader />
       );
     }
 
@@ -185,12 +153,12 @@ export default class App extends React.Component {
       return (
         <Provider store={store}>
           <Root>
-            <OfflineBar/>
-            <StatusBar barStyle="light-content" translucent={true} backgroundColor={'transparent'}/>
-            <LoggedNavigation/>
+            <OfflineBar />
+            <StatusBar barStyle="light-content" translucent={true} backgroundColor={'transparent'} />
+            <LoggedNavigation />
             <NotificationPopup
               ref={ref => notificationPopUp = ref}
-              renderPopupContent={this.renderCustomPopup}/>
+              renderPopupContent={this.renderCustomPopup} />
           </Root>
         </Provider>
       );
