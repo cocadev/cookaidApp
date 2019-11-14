@@ -1,12 +1,12 @@
 import ConfigApp from "./ConfigApp";
 import CacheManager from "./CacheManager";
-import {getTargetLanguage, translatePromptStringArray, translateRecipe} from "./Translating";
+import { getTargetLanguage, translatePromptStringArray, translateRecipe } from "./Translating";
 
 export function getRandomInt(min, max) {
   return Math.round(Math.random() * (max - min) + min);
 }
 
-export const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+export const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
   const paddingToBottom = 20;
   return layoutMeasurement.height + contentOffset.y >=
     contentSize.height - paddingToBottom;
@@ -64,7 +64,7 @@ export function randomItemFromArray(array) {
   if (!array || !Array.isArray(array)) {
     return null;
   }
-  let value = array[Math.floor(Math.random()*array.length)];
+  let value = array[Math.floor(Math.random() * array.length)];
   if (value && value.toLowerCase() === "lacto ovo vegetarian") {
     return "Vegetarian (Lacto/Ovo)";
   }
@@ -157,7 +157,7 @@ export function convertRecipesSpoonacularToCookAid(recipes, cuisine, diet = null
 }
 export async function preLoadRecipeImage(recipes) {
   const length = recipes.length;
-  for (let i = 0; i< length; i++) {
+  for (let i = 0; i < length; i++) {
     const item = recipes[i];
     await CacheManager.prefetch(item.recipe_image_lower);
   }
@@ -225,7 +225,7 @@ export function getRandomArray(array, maxNumber) {
 }
 
 export function findDuplicateInArray(arg) {
-  return arg.filter(function(a){
+  return arg.filter(function (a) {
     return arg.indexOf(a) !== arg.lastIndexOf(a)
   });
 }
