@@ -94,7 +94,10 @@ CookAid features over 300,000 recipes in more than sixty languages from around t
 -   [x] Make it work on IOS
 -   [x] Make it work on Android
 -   [x] Make it work on ExpoKit
--   [x] Make it work on Firebase
+-   [x] Firebase Hosting
+-   [x] Push Notification
+-   [x] Spoonacular Food Api Integration
+-   [x] Multi Language
 -   [x] Transform into responsive
 -   [x] Update to latest React Native version
 
@@ -122,14 +125,14 @@ CookAid features over 300,000 recipes in more than sixty languages from around t
   <img src="https://apprecs.org/gp/images/app-icons/300/d8/host.exp.exponent.jpg" alt="Stack" height="100" width="100">
   <img src="https://ionicframework.com/docs/assets/icons/logo-react-icon.png" alt="Stack" height="100" width="100">
   <img src="https://cdn4.iconfinder.com/data/icons/google-i-o-2016/512/google_firebase-512.png" alt="Stack" height="100" width="100">
-  <img src="https://icon-library.net/images/png-map-icon/png-map-icon-26.jpg" alt="Stack" height="100" width="100">
+  <img src="https://is5-ssl.mzstatic.com/image/thumb/Purple123/v4/f6/1e/9d/f61e9ddc-8262-fc77-35f5-b8a99e9697dd/source/256x256bb.jpg" alt="Stack" height="100" width="100">
   <img src="https://cdn.iconscout.com/icon/free/png-512/facebook-logo-2019-1597680-1350125.png" alt="Stack" height="100" width="100">
 
   <br>
 </h1>
 
 -   [React Native](https://github.com/facebook/react-native)
--   [Styled Components](https://www.styled-components.com/)
+-   [Antd Mobile RN](https://github.com/ant-design/ant-design-mobile-rn)
 -   [Eslint](https://eslint.org/)
 -   [Redux](https://github.com/reduxjs/react-redux)
 -   [OneSignal](https://onesignal.com)
