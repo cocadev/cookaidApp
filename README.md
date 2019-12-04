@@ -59,6 +59,30 @@
   <kbd>
     <img width="250" style="border-radius: 5px" height="450" src="screenshots/6.jpg" alt="6">
   </kbd>
+  <br/><br/>
+  <kbd>
+    <img width="250" style="border-radius: 5px" height="450" src="screenshots/7.jpg" alt="4">
+  </kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+  <kbd>
+    <img width="250" style="border-radius: 5px" height="450" src="screenshots/8.jpg" alt="5">
+  </kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+  <kbd>
+    <img width="250" style="border-radius: 5px" height="450" src="screenshots/9.jpg" alt="6">
+  </kbd>
+  <br/><br/>
+  <kbd>
+    <img width="250" style="border-radius: 5px" height="450" src="screenshots/10.jpg" alt="4">
+  </kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+  <kbd>
+    <img width="250" style="border-radius: 5px" height="450" src="screenshots/11.jpg" alt="5">
+  </kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+  <kbd>
+    <img width="250" style="border-radius: 5px" height="450" src="screenshots/12.jpg" alt="6">
+  </kbd>
 </p>
 
 ## :blush: **Overview?**
@@ -80,7 +104,7 @@ CookAid features over 300,000 recipes in more than sixty languages from around t
 
 #### 1) Clone & Install Dependencies
 
-- 1.1) `git clone https://github.com/funnyjerry/react-native-homeautomation-app.git`
+- 1.1) `git clone https://github.com/funnyjerry/react-native-expokit-food-ordering.git`
 - 1.2) `cd react-native-homeautomation-app` - cd into your newly created project directory.
 - 1.3) Install NPM packages with `yarn install`
         **Note:** NPM has issues with React Native so `yarn` is recommended over `npm`.
@@ -104,19 +128,11 @@ CookAid features over 300,000 recipes in more than sixty languages from around t
   <br>
 </h1>
 
--   [Facebook Login](https://github.com/facebook/react-native-fbsdk)
 -   [React Native](https://github.com/facebook/react-native)
 -   [Styled Components](https://www.styled-components.com/)
--   [Reactotron](https://infinite.red/reactotron)
 -   [Eslint](https://eslint.org/)
 -   [Redux](https://github.com/reduxjs/react-redux)
--   [MongoDB](https://www.mongodb.com/)
--   [Formik + Yup](https://jaredpalmer.com/formik/)
--   [Apollo](https://apollographql.com)
--   [GraphQL](https://github.com/facebook/graphql)
--   [Kraken](https://github.com/wendelfreitas/kraken)
 -   [OneSignal](https://onesignal.com)
--   [AWS](https://aws.amazon.com/pt/)
 -   [Redux-Persist](https://github.com/rt2zz/redux-persist)
 
 ## :iphone: **Test**
