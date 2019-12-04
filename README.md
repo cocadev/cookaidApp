@@ -126,8 +126,6 @@ CookAid features over 300,000 recipes in more than sixty languages from around t
   <img src="https://ionicframework.com/docs/assets/icons/logo-react-icon.png" alt="Stack" height="100" width="100">
   <img src="https://cdn4.iconfinder.com/data/icons/google-i-o-2016/512/google_firebase-512.png" alt="Stack" height="100" width="100">
   <img src="https://is5-ssl.mzstatic.com/image/thumb/Purple123/v4/f6/1e/9d/f61e9ddc-8262-fc77-35f5-b8a99e9697dd/source/256x256bb.jpg" alt="Stack" height="100" width="100">
-  <img src="https://cdn.iconscout.com/icon/free/png-512/facebook-logo-2019-1597680-1350125.png" alt="Stack" height="100" width="100">
-
   <br>
 </h1>
 
