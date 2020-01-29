@@ -1,4 +1,4 @@
-<h1 align="center"><b> Recipes & Nutrition App </b> </h1>
+<h1 align="center"><b> Recipes & Nutrition React-Native Expokit App </b> </h1>
 
 <h1 align="center">
   <br>
