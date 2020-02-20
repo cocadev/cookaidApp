@@ -1,14 +1,5 @@
 <h1 align="center"><b> Recipes & Nutrition React-Native Expokit App </b> </h1>
 
-<h1 align="center">
-  <br>
-  <kbd>
-    <img src="https://image.prntscr.com/image/YrkdAm5xSxe0MmkqrvGeJA.png" alt="Animavita" height="525" width="725">
-  </kbd>
-  <br>
-  <br><br>
-</h1>
-
 <p align="center">A minimal, clean and beautiful mobile app to help people find the foods to delivery and change the world.</p>
 
 <p align="center"><i>"How to save a life?" - The Food Delivery</i> </p>
