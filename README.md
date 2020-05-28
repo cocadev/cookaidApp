@@ -98,7 +98,7 @@ CookAid features over 300,000 recipes in more than sixty languages from around t
 
 #### 1) Clone & Install Dependencies
 
-- 1.1) `git clone https://github.com/funnyjerry/react-native-expokit-food-ordering.git`
+- 1.1) `git clone https://github.com/kingofdevs/react-native-expokit-food-ordering.git`
 - 1.2) `cd react-native-homeautomation-app` - cd into your newly created project directory.
 - 1.3) Install NPM packages with `yarn install`
         **Note:** NPM has issues with React Native so `yarn` is recommended over `npm`.
