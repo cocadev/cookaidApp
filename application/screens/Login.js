@@ -2,23 +2,7 @@ import React, {Component} from 'react';
 
 var styles = require('../../assets/files/Styles');
 import {Alert, Dimensions, Image, TouchableOpacity} from 'react-native';
-import {
-  Container,
-  Body,
-  Footer,
-  Header,
-  Input,
-  Item,
-  Left,
-  Text,
-  Title,
-  Right,
-  View,
-  Button,
-  Toast,
-  Label,
-  Form
-} from 'native-base';
+import {Container, Body, Footer, Header, Input, Item, Left, Text, Title, Right, View, Button, Toast, Label, Form } from 'native-base';
 import * as firebase from 'firebase';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import Icono from 'react-native-vector-icons/Ionicons';
