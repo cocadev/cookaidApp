@@ -16,7 +16,7 @@
     "accordion-collapse-react-native": "^0.1.7",
     "antd-mobile-rn": "^2.3.3",
     "app-loading": "0.0.51",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "document": "^0.4.7",
     "expo": "^35.0.0",
     "expo-analytics-amplitude": "~6.0.0",
