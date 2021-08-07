@@ -2,8 +2,6 @@
 
 <p align="center">A minimal, clean and beautiful mobile app to help people find the foods to delivery and change the world.</p>
 
-<p align="center"><i>"How to save a life?" - The Food Delivery</i> </p>
-
 <p align="center">
   <a href="http://makeapullrequest.com">
     <img src="https://img.shields.io/badge/progress-40%25-brightgreen.svg" alt="PRs Welcome">
