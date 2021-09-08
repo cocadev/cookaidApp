@@ -11,3 +11,4 @@ android/app/build/*
 android/app/app.iml
 
 yarn.lock
+package.lock-json
